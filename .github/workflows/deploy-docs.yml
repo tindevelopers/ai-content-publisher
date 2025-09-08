@@ -1,12 +1,14 @@
-name: Deploy Documentation
+name: Generate Documentation
 
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  deploy-docs:
+  generate-docs:
     runs-on: ubuntu-latest
     
     steps:
@@ -26,73 +28,11 @@ jobs:
       run: npm run build
       
     - name: Generate API documentation
-      run: |
-        npm install -g typedoc
-        typedoc src/index.ts --out docs/api --theme default
+      run: npm run docs:generate
         
-    - name: Create documentation site
-      run: |
-        mkdir -p docs-site
-        cp README.md docs-site/index.md
-        cp GETTING_STARTED.md docs-site/getting-started.md
-        cp -r docs/api docs-site/api
-        cp -r content-examples docs-site/examples
-        
-        # Create a simple index.html
-        cat > docs-site/index.html << 'EOF'
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>AI Content Publisher SDK</title>
-            <style>
-                body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
-                .header { text-align: center; margin-bottom: 40px; }
-                .nav { display: flex; gap: 20px; justify-content: center; margin-bottom: 40px; }
-                .nav a { padding: 10px 20px; background: #007acc; color: white; text-decoration: none; border-radius: 5px; }
-                .nav a:hover { background: #005a9e; }
-                .card { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-            </style>
-        </head>
-        <body>
-            <div class="header">
-                <h1>🚀 AI Content Publisher SDK</h1>
-                <p>Seamlessly publish AI-generated content to Webflow and WordPress</p>
-            </div>
-            
-            <div class="nav">
-                <a href="getting-started.md">Getting Started</a>
-                <a href="api/">API Documentation</a>
-                <a href="examples/">Examples</a>
-                <a href="https://github.com/your-org/ai-content-publisher">GitHub</a>
-            </div>
-            
-            <div class="card">
-                <h2>Quick Start</h2>
-                <pre><code>npm install ai-content-publisher</code></pre>
-            </div>
-            
-            <div class="card">
-                <h2>Features</h2>
-                <ul>
-                    <li>✅ Unified interface for Webflow and WordPress</li>
-                    <li>✅ TypeScript support with full type definitions</li>
-                    <li>✅ Content validation and error handling</li>
-                    <li>✅ Batch publishing capabilities</li>
-                    <li>✅ CLI tool for automation</li>
-                    <li>✅ SEO optimization built-in</li>
-                </ul>
-            </div>
-        </body>
-        </html>
-        EOF
-        
-    - name: Deploy to Vercel
-      uses: amondnet/vercel-action@v25
+    - name: Upload documentation artifacts
+      uses: actions/upload-artifact@v3
       with:
-        vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        working-directory: ./docs-site
-        vercel-args: '--prod'
+        name: api-documentation
+        path: docs/api/
+        retention-days: 30
