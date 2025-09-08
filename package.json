@@ -1,0 +1,76 @@
+{
+  "name": "ai-content-publisher",
+  "version": "1.0.0",
+  "description": "SDK for publishing AI-generated content to Webflow and WordPress",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "ai-publisher": "dist/cli/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "prepublishOnly": "npm run build",
+    "build:cli": "npm run build && chmod +x dist/cli/cli.js",
+    "semantic-release": "semantic-release",
+    "docs:generate": "typedoc src/index.ts --out docs/api",
+    "docker:build": "docker build -t ai-content-publisher .",
+    "docker:run": "docker run --rm ai-content-publisher"
+  },
+  "keywords": [
+    "ai",
+    "content",
+    "publishing",
+    "webflow",
+    "wordpress",
+    "cms",
+    "automation"
+  ],
+  "author": "Your Organization",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@types/jest": "^29.5.5",
+    "@types/node": "^20.6.3",
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
+    "conventional-changelog-cli": "^5.0.0",
+    "eslint": "^8.49.0",
+    "jest": "^29.7.0",
+    "semantic-release": "^21.1.2",
+    "ts-jest": "^29.1.1",
+    "typedoc": "^0.25.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "axios": "^1.5.0",
+    "commander": "^11.1.0",
+    "dotenv": "^16.3.1",
+    "form-data": "^4.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "GETTING_STARTED.md",
+    "content-examples"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/ai-content-publisher.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/ai-content-publisher/issues"
+  },
+  "homepage": "https://github.com/your-org/ai-content-publisher#readme"
+}
