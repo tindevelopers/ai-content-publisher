@@ -356,3 +356,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ---
 
 Built with ❤️ for the AI content creation community.
+
+## Latest Updates
+
+- **v1.0.1** - Enhanced error handling and improved TypeScript definitions
+- **v1.0.0** - Initial release with Webflow and WordPress support
