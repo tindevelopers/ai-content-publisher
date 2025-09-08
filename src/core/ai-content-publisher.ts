@@ -10,13 +10,13 @@ import {
   PublisherConfig, 
   WebflowConfig, 
   WordPressConfig, 
-  APIResponse 
+  APIResponse, 
 } from '../types/config';
 import { 
   AIContent, 
   PublishResult, 
   ValidationResult, 
-  Collection 
+  Collection, 
 } from '../types/content';
 
 export class AIContentPublisher {
@@ -55,7 +55,7 @@ export class AIContentPublisher {
     const config: WebflowConfig = {
       apiKey,
       siteId,
-      defaultCollectionId
+      defaultCollectionId,
     };
 
     this.configManager.setWebflowConfig(config);
@@ -80,7 +80,7 @@ export class AIContentPublisher {
       username,
       password,
       defaultCategory: options?.defaultCategory,
-      defaultAuthor: options?.defaultAuthor
+      defaultAuthor: options?.defaultAuthor,
     };
 
     this.configManager.setWordPressConfig(config);
@@ -104,7 +104,7 @@ export class AIContentPublisher {
         success: false,
         platform,
         message: 'Content validation failed',
-        errors: validation.errors.map(e => `${e.field}: ${e.message}`)
+        errors: validation.errors.map(e => `${e.field}: ${e.message}`),
       };
     }
 
@@ -119,7 +119,7 @@ export class AIContentPublisher {
           success: false,
           platform,
           message: 'Unsupported platform',
-          errors: ['UNSUPPORTED_PLATFORM']
+          errors: ['UNSUPPORTED_PLATFORM'],
         };
     }
   }
@@ -137,7 +137,7 @@ export class AIContentPublisher {
         success: false,
         platform,
         message: 'Content validation failed',
-        errors: validation.errors.map(e => `${e.field}: ${e.message}`)
+        errors: validation.errors.map(e => `${e.field}: ${e.message}`),
       }));
     }
 
@@ -153,7 +153,7 @@ export class AIContentPublisher {
           success: false,
           platform: platforms[index],
           message: 'Publish operation failed',
-          errors: [result.reason?.message || 'Unknown error']
+          errors: [result.reason?.message || 'Unknown error'],
         });
       }
     });
@@ -168,7 +168,7 @@ export class AIContentPublisher {
     contentId: string, 
     updates: Partial<AIContent>, 
     platform: 'webflow' | 'wordpress',
-    options?: { collectionId?: string; postType?: string }
+    options?: { collectionId?: string; postType?: string },
   ): Promise<PublishResult> {
     switch (platform) {
       case 'webflow':
@@ -194,7 +194,7 @@ export class AIContentPublisher {
   async deleteContent(
     contentId: string, 
     platform: 'webflow' | 'wordpress',
-    options?: { collectionId?: string; postType?: string }
+    options?: { collectionId?: string; postType?: string },
   ): Promise<PublishResult> {
     switch (platform) {
       case 'webflow':
@@ -219,15 +219,17 @@ export class AIContentPublisher {
    */
   async getAvailableCollections(platform: 'webflow' | 'wordpress'): Promise<Collection[]> {
     switch (platform) {
-      case 'webflow':
+      case 'webflow': {
         if (!this.webflowAdapter) return [];
         const webflowResult = await this.webflowAdapter.getCollections();
         return webflowResult.success ? webflowResult.data || [] : [];
+      }
         
-      case 'wordpress':
+      case 'wordpress': {
         if (!this.wordpressAdapter) return [];
         const wpResult = await this.wordpressAdapter.getCollections();
         return wpResult.success ? wpResult.data || [] : [];
+      }
         
       default:
         return [];
@@ -269,7 +271,7 @@ export class AIContentPublisher {
   getConfigurationStatus(): Record<string, boolean> {
     return {
       webflow: this.configManager.isConfigured('webflow'),
-      wordpress: this.configManager.isConfigured('wordpress')
+      wordpress: this.configManager.isConfigured('wordpress'),
     };
   }
 
@@ -289,7 +291,7 @@ export class AIContentPublisher {
     options?: {
       concurrency?: number;
       stopOnError?: boolean;
-    }
+    },
   ): Promise<PublishResult[]> {
     const concurrency = options?.concurrency || 5;
     const stopOnError = options?.stopOnError || false;
@@ -314,7 +316,7 @@ export class AIContentPublisher {
             success: false,
             platform,
             message: 'Batch publish failed',
-            errors: [result.reason?.message || 'Unknown error']
+            errors: [result.reason?.message || 'Unknown error'],
           };
           results.push(errorResult);
           
@@ -358,7 +360,7 @@ export class AIContentPublisher {
       success: false,
       platform,
       message,
-      errors: [message]
+      errors: [message],
     };
   }
 

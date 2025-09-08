@@ -20,14 +20,14 @@ describe('AIContentPublisher', () => {
     it('should configure Webflow successfully', async () => {
       // Mock successful connection test
       const mockWebflowAdapter = {
-        testConnection: jest.fn().mockResolvedValue({ success: true })
+        testConnection: jest.fn().mockResolvedValue({ success: true }),
       };
       
       (require('../adapters/webflow-adapter').WebflowAdapter as jest.Mock)
         .mockImplementation(() => mockWebflowAdapter);
 
       await expect(
-        publisher.configureWebflow('test-api-key', 'test-site-id')
+        publisher.configureWebflow('test-api-key', 'test-site-id'),
       ).resolves.not.toThrow();
 
       expect(publisher.getConfigurationStatus().webflow).toBe(true);
@@ -36,14 +36,14 @@ describe('AIContentPublisher', () => {
     it('should configure WordPress successfully', async () => {
       // Mock successful connection test
       const mockWordPressAdapter = {
-        testConnection: jest.fn().mockResolvedValue({ success: true })
+        testConnection: jest.fn().mockResolvedValue({ success: true }),
       };
       
       (require('../adapters/wordpress-adapter').WordPressAdapter as jest.Mock)
         .mockImplementation(() => mockWordPressAdapter);
 
       await expect(
-        publisher.configureWordPress('https://test.com', 'user', 'pass')
+        publisher.configureWordPress('https://test.com', 'user', 'pass'),
       ).resolves.not.toThrow();
 
       expect(publisher.getConfigurationStatus().wordpress).toBe(true);
@@ -54,15 +54,15 @@ describe('AIContentPublisher', () => {
       const mockWebflowAdapter = {
         testConnection: jest.fn().mockResolvedValue({ 
           success: false, 
-          error: 'Invalid API key' 
-        })
+          error: 'Invalid API key', 
+        }),
       };
       
       (require('../adapters/webflow-adapter').WebflowAdapter as jest.Mock)
         .mockImplementation(() => mockWebflowAdapter);
 
       await expect(
-        publisher.configureWebflow('invalid-key', 'test-site-id')
+        publisher.configureWebflow('invalid-key', 'test-site-id'),
       ).rejects.toThrow('Webflow configuration failed: Invalid API key');
     });
   });
@@ -73,7 +73,7 @@ describe('AIContentPublisher', () => {
         type: 'blog',
         title: '', // Invalid - empty title
         content: 'Valid content',
-        status: 'published'
+        status: 'published',
       };
 
       const result = await publisher.publish(invalidContent, 'webflow');
@@ -88,7 +88,7 @@ describe('AIContentPublisher', () => {
         type: 'blog',
         title: 'Valid Title',
         content: 'Valid content here',
-        status: 'published'
+        status: 'published',
       };
 
       const validation = publisher.validateContent(content);
@@ -101,7 +101,7 @@ describe('AIContentPublisher', () => {
       type: 'blog',
       title: 'Test Blog Post',
       content: 'This is test content for the blog post.',
-      status: 'published'
+      status: 'published',
     };
 
     beforeEach(() => {
@@ -112,8 +112,8 @@ describe('AIContentPublisher', () => {
           success: true,
           platform: 'webflow',
           contentId: 'test-id',
-          url: 'https://test.webflow.io/test-id'
-        })
+          url: 'https://test.webflow.io/test-id',
+        }),
       };
 
       const mockWordPressAdapter = {
@@ -122,8 +122,8 @@ describe('AIContentPublisher', () => {
           success: true,
           platform: 'wordpress',
           contentId: '123',
-          url: 'https://test.com/test-post'
-        })
+          url: 'https://test.com/test-post',
+        }),
       };
 
       (require('../adapters/webflow-adapter').WebflowAdapter as jest.Mock)
@@ -186,14 +186,14 @@ describe('AIContentPublisher', () => {
         type: 'blog',
         title: 'Post 1 Title',
         content: 'This is valid content for post 1 with sufficient length.',
-        status: 'published'
+        status: 'published',
       },
       {
         type: 'blog',
         title: 'Post 2 Title',
         content: 'This is valid content for post 2 with sufficient length.',
-        status: 'published'
-      }
+        status: 'published',
+      },
     ];
 
     it('should batch publish content items', async () => {
@@ -204,13 +204,13 @@ describe('AIContentPublisher', () => {
           .mockResolvedValueOnce({
             success: true,
             platform: 'wordpress',
-            contentId: '1'
+            contentId: '1',
           })
           .mockResolvedValueOnce({
             success: true,
             platform: 'wordpress',
-            contentId: '2'
-          })
+            contentId: '2',
+          }),
       };
 
       (require('../adapters/wordpress-adapter').WordPressAdapter as jest.Mock)
@@ -232,13 +232,13 @@ describe('AIContentPublisher', () => {
           .mockResolvedValueOnce({
             success: true,
             platform: 'wordpress',
-            contentId: '1'
+            contentId: '1',
           })
           .mockResolvedValueOnce({
             success: false,
             platform: 'wordpress',
-            message: 'Publishing failed'
-          })
+            message: 'Publishing failed',
+          }),
       };
 
       (require('../adapters/wordpress-adapter').WordPressAdapter as jest.Mock)
@@ -247,7 +247,7 @@ describe('AIContentPublisher', () => {
       await publisher.configureWordPress('https://test.com', 'user', 'pass');
       
       const results = await publisher.batchPublish(contentItems, 'wordpress', {
-        stopOnError: false
+        stopOnError: false,
       });
       
       expect(results).toHaveLength(2);
@@ -261,7 +261,7 @@ describe('AIContentPublisher', () => {
       const status = publisher.getConfigurationStatus();
       expect(status).toEqual({
         webflow: false,
-        wordpress: false
+        wordpress: false,
       });
     });
 

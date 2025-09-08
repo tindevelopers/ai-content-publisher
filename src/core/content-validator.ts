@@ -35,7 +35,7 @@ export class ContentValidator {
     return {
       isValid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   }
 
@@ -47,7 +47,7 @@ export class ContentValidator {
       errors.push({
         field: 'title',
         message: 'Title is required',
-        code: 'TITLE_REQUIRED'
+        code: 'TITLE_REQUIRED',
       });
       return;
     }
@@ -58,7 +58,7 @@ export class ContentValidator {
       errors.push({
         field: 'title',
         message: `Title must be at least ${this.minTitleLength} characters long`,
-        code: 'TITLE_TOO_SHORT'
+        code: 'TITLE_TOO_SHORT',
       });
     }
 
@@ -66,7 +66,7 @@ export class ContentValidator {
       errors.push({
         field: 'title',
         message: `Title must not exceed ${this.maxTitleLength} characters`,
-        code: 'TITLE_TOO_LONG'
+        code: 'TITLE_TOO_LONG',
       });
     }
   }
@@ -79,7 +79,7 @@ export class ContentValidator {
       errors.push({
         field: 'content',
         message: 'Content is required',
-        code: 'CONTENT_REQUIRED'
+        code: 'CONTENT_REQUIRED',
       });
       return;
     }
@@ -90,7 +90,7 @@ export class ContentValidator {
       errors.push({
         field: 'content',
         message: `Content must be at least ${this.minContentLength} characters long`,
-        code: 'CONTENT_TOO_SHORT'
+        code: 'CONTENT_TOO_SHORT',
       });
     }
   }
@@ -105,7 +105,7 @@ export class ContentValidator {
       errors.push({
         field: 'type',
         message: `Invalid content type. Must be one of: ${validTypes.join(', ')}`,
-        code: 'INVALID_CONTENT_TYPE'
+        code: 'INVALID_CONTENT_TYPE',
       });
     }
   }
@@ -118,7 +118,7 @@ export class ContentValidator {
       warnings.push({
         field: 'excerpt',
         message: 'Excerpt is recommended for better SEO',
-        code: 'EXCERPT_MISSING'
+        code: 'EXCERPT_MISSING',
       });
       return;
     }
@@ -127,7 +127,7 @@ export class ContentValidator {
       errors.push({
         field: 'excerpt',
         message: `Excerpt must not exceed ${this.maxExcerptLength} characters`,
-        code: 'EXCERPT_TOO_LONG'
+        code: 'EXCERPT_TOO_LONG',
       });
     }
   }
@@ -140,7 +140,7 @@ export class ContentValidator {
       warnings.push({
         field: 'tags',
         message: 'Tags are recommended for better content organization',
-        code: 'TAGS_MISSING'
+        code: 'TAGS_MISSING',
       });
       return;
     }
@@ -149,7 +149,7 @@ export class ContentValidator {
       warnings.push({
         field: 'tags',
         message: 'Too many tags may dilute SEO effectiveness. Consider using 5-10 tags.',
-        code: 'TOO_MANY_TAGS'
+        code: 'TOO_MANY_TAGS',
       });
     }
 
@@ -159,7 +159,7 @@ export class ContentValidator {
       warnings.push({
         field: 'tags',
         message: 'Some tags are empty or invalid',
-        code: 'INVALID_TAGS'
+        code: 'INVALID_TAGS',
       });
     }
   }
@@ -172,7 +172,7 @@ export class ContentValidator {
       warnings.push({
         field: 'categories',
         message: 'Categories are recommended for better content organization',
-        code: 'CATEGORIES_MISSING'
+        code: 'CATEGORIES_MISSING',
       });
     }
   }
@@ -185,7 +185,7 @@ export class ContentValidator {
       warnings.push({
         field: 'seo',
         message: 'SEO data is recommended for better search visibility',
-        code: 'SEO_MISSING'
+        code: 'SEO_MISSING',
       });
       return;
     }
@@ -194,13 +194,13 @@ export class ContentValidator {
       warnings.push({
         field: 'seo.metaDescription',
         message: 'Meta description is recommended for SEO',
-        code: 'META_DESCRIPTION_MISSING'
+        code: 'META_DESCRIPTION_MISSING',
       });
     } else if (seo.metaDescription.length > 160) {
       warnings.push({
         field: 'seo.metaDescription',
         message: 'Meta description should be under 160 characters for optimal display',
-        code: 'META_DESCRIPTION_TOO_LONG'
+        code: 'META_DESCRIPTION_TOO_LONG',
       });
     }
 
@@ -208,13 +208,13 @@ export class ContentValidator {
       warnings.push({
         field: 'seo.metaTitle',
         message: 'Meta title is recommended for SEO',
-        code: 'META_TITLE_MISSING'
+        code: 'META_TITLE_MISSING',
       });
     } else if (seo.metaTitle.length > 60) {
       warnings.push({
         field: 'seo.metaTitle',
         message: 'Meta title should be under 60 characters for optimal display',
-        code: 'META_TITLE_TOO_LONG'
+        code: 'META_TITLE_TOO_LONG',
       });
     }
   }
@@ -227,7 +227,7 @@ export class ContentValidator {
       warnings.push({
         field: 'images',
         message: 'Images are recommended for better engagement',
-        code: 'IMAGES_MISSING'
+        code: 'IMAGES_MISSING',
       });
       return;
     }
@@ -237,7 +237,7 @@ export class ContentValidator {
         warnings.push({
           field: `images[${index}].url`,
           message: 'Image URL is required',
-          code: 'IMAGE_URL_MISSING'
+          code: 'IMAGE_URL_MISSING',
         });
       }
 
@@ -245,7 +245,7 @@ export class ContentValidator {
         warnings.push({
           field: `images[${index}].alt`,
           message: 'Alt text is recommended for accessibility and SEO',
-          code: 'IMAGE_ALT_MISSING'
+          code: 'IMAGE_ALT_MISSING',
         });
       }
     });
@@ -257,7 +257,7 @@ export class ContentValidator {
   private validateTypeSpecificContent(content: AIContent, errors: ValidationError[], warnings: ValidationError[]): void {
     switch (content.type) {
       case 'faq':
-        this.validateFAQContent(content, errors, warnings);
+        this.validateFAQContent(content, errors);
         break;
       case 'product-description':
         this.validateProductContent(content, warnings);
@@ -271,12 +271,12 @@ export class ContentValidator {
   /**
    * Validate FAQ-specific content
    */
-  private validateFAQContent(content: AIContent, errors: ValidationError[], warnings: ValidationError[]): void {
+  private validateFAQContent(content: AIContent, errors: ValidationError[]): void {
     if (!content.faqs || content.faqs.length === 0) {
       errors.push({
         field: 'faqs',
         message: 'FAQ items are required for FAQ content type',
-        code: 'FAQ_ITEMS_REQUIRED'
+        code: 'FAQ_ITEMS_REQUIRED',
       });
       return;
     }
@@ -286,7 +286,7 @@ export class ContentValidator {
         errors.push({
           field: `faqs[${index}].question`,
           message: 'FAQ question is required',
-          code: 'FAQ_QUESTION_REQUIRED'
+          code: 'FAQ_QUESTION_REQUIRED',
         });
       }
 
@@ -294,7 +294,7 @@ export class ContentValidator {
         errors.push({
           field: `faqs[${index}].answer`,
           message: 'FAQ answer is required',
-          code: 'FAQ_ANSWER_REQUIRED'
+          code: 'FAQ_ANSWER_REQUIRED',
         });
       }
     });
@@ -308,7 +308,7 @@ export class ContentValidator {
       warnings.push({
         field: 'specifications',
         message: 'Product specifications are recommended for product descriptions',
-        code: 'SPECIFICATIONS_MISSING'
+        code: 'SPECIFICATIONS_MISSING',
       });
     }
   }
@@ -321,7 +321,7 @@ export class ContentValidator {
       warnings.push({
         field: 'ctaText',
         message: 'Call-to-action text is recommended for landing pages',
-        code: 'CTA_TEXT_MISSING'
+        code: 'CTA_TEXT_MISSING',
       });
     }
 
@@ -329,7 +329,7 @@ export class ContentValidator {
       warnings.push({
         field: 'ctaUrl',
         message: 'Call-to-action URL is recommended for landing pages',
-        code: 'CTA_URL_MISSING'
+        code: 'CTA_URL_MISSING',
       });
     }
   }

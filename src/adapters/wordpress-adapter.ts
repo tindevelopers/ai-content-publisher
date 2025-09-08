@@ -26,9 +26,9 @@ export class WordPressAdapter {
       baseURL: `${this.config.siteUrl}/${this.config.apiVersion || 'wp/v2'}`,
       headers: {
         'Authorization': `Basic ${auth}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      timeout: 30000
+      timeout: 30000,
     });
   }
 
@@ -41,13 +41,13 @@ export class WordPressAdapter {
       return {
         success: true,
         data: response.data,
-        statusCode: response.status
+        statusCode: response.status,
       };
     } catch (error: any) {
       return {
         success: false,
         error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status
+        statusCode: error.response?.status,
       };
     }
   }
@@ -66,19 +66,19 @@ export class WordPressAdapter {
           name: type.name,
           slug: type.slug,
           platform: 'wordpress' as const,
-          fields: this.getWordPressFields(type.slug)
+          fields: this.getWordPressFields(type.slug),
         }));
 
       return {
         success: true,
         data: collections,
-        statusCode: response.status
+        statusCode: response.status,
       };
     } catch (error: any) {
       return {
         success: false,
         error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status
+        statusCode: error.response?.status,
       };
     }
   }
@@ -92,13 +92,13 @@ export class WordPressAdapter {
       return {
         success: true,
         data: response.data,
-        statusCode: response.status
+        statusCode: response.status,
       };
     } catch (error: any) {
       return {
         success: false,
         error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status
+        statusCode: error.response?.status,
       };
     }
   }
@@ -112,13 +112,13 @@ export class WordPressAdapter {
       return {
         success: true,
         data: response.data,
-        statusCode: response.status
+        statusCode: response.status,
       };
     } catch (error: any) {
       return {
         success: false,
         error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status
+        statusCode: error.response?.status,
       };
     }
   }
@@ -138,7 +138,7 @@ export class WordPressAdapter {
       const response = await this.client.post(
         `/${postType}`,
         wpData,
-        { timeout: options?.timeout }
+        { timeout: options?.timeout },
       );
 
       // Handle featured image if provided
@@ -152,7 +152,7 @@ export class WordPressAdapter {
         contentId: response.data.id.toString(),
         url: response.data.link,
         message: 'Content published successfully to WordPress',
-        publishedAt: new Date(response.data.date)
+        publishedAt: new Date(response.data.date),
       };
 
     } catch (error: any) {
@@ -160,7 +160,7 @@ export class WordPressAdapter {
         success: false,
         platform: 'wordpress',
         message: 'Failed to publish content to WordPress',
-        errors: [error.response?.data?.message || error.message]
+        errors: [error.response?.data?.message || error.message],
       };
     }
   }
@@ -176,7 +176,7 @@ export class WordPressAdapter {
       // Update the post
       const response = await this.client.patch(
         `/${postType}/${contentId}`,
-        wpData
+        wpData,
       );
 
       return {
@@ -185,7 +185,7 @@ export class WordPressAdapter {
         contentId: response.data.id.toString(),
         url: response.data.link,
         message: 'Content updated successfully in WordPress',
-        publishedAt: new Date(response.data.modified)
+        publishedAt: new Date(response.data.modified),
       };
 
     } catch (error: any) {
@@ -193,7 +193,7 @@ export class WordPressAdapter {
         success: false,
         platform: 'wordpress',
         message: 'Failed to update content in WordPress',
-        errors: [error.response?.data?.message || error.message]
+        errors: [error.response?.data?.message || error.message],
       };
     }
   }
@@ -214,20 +214,20 @@ export class WordPressAdapter {
       const response = await this.client.post('/media', formData, {
         headers: {
           ...formData.getHeaders(),
-          'Content-Disposition': 'attachment; filename="' + (filename || 'image.jpg') + '"'
-        }
+          'Content-Disposition': 'attachment; filename="' + (filename || 'image.jpg') + '"',
+        },
       });
 
       return {
         success: true,
         data: response.data,
-        statusCode: response.status
+        statusCode: response.status,
       };
     } catch (error: any) {
       return {
         success: false,
         error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status
+        statusCode: error.response?.status,
       };
     }
   }
@@ -240,7 +240,7 @@ export class WordPressAdapter {
       title: content.title,
       content: content.content,
       status: this.mapStatus(content.status),
-      excerpt: content.excerpt || ''
+      excerpt: content.excerpt || '',
     };
 
     // Handle categories
@@ -272,7 +272,7 @@ export class WordPressAdapter {
       wpData.meta = {
         ...(content.seo.metaTitle && { _yoast_wpseo_title: content.seo.metaTitle }),
         ...(content.seo.metaDescription && { _yoast_wpseo_metadesc: content.seo.metaDescription }),
-        ...(content.seo.keywords && { _yoast_wpseo_focuskw: content.seo.keywords.join(', ') })
+        ...(content.seo.keywords && { _yoast_wpseo_focuskw: content.seo.keywords.join(', ') }),
       };
     }
 
@@ -334,14 +334,14 @@ export class WordPressAdapter {
       for (const category of categories) {
         let wpCategory = wpCategories.find((cat: any) => 
           cat.name.toLowerCase() === category.toLowerCase() ||
-          cat.slug.toLowerCase() === category.toLowerCase()
+          cat.slug.toLowerCase() === category.toLowerCase(),
         );
 
         if (!wpCategory) {
           // Create new category
           const newCategoryResponse = await this.client.post('/categories', {
             name: category,
-            slug: category.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+            slug: category.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
           });
           if (newCategoryResponse.data) {
             wpCategory = newCategoryResponse.data;
@@ -374,14 +374,14 @@ export class WordPressAdapter {
       for (const tag of tags) {
         let wpTag = wpTags.find((t: any) => 
           t.name.toLowerCase() === tag.toLowerCase() ||
-          t.slug.toLowerCase() === tag.toLowerCase()
+          t.slug.toLowerCase() === tag.toLowerCase(),
         );
 
         if (!wpTag) {
           // Create new tag
           const newTagResponse = await this.client.post('/tags', {
             name: tag,
-            slug: tag.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+            slug: tag.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
           });
           if (newTagResponse.data) {
             wpTag = newTagResponse.data;
@@ -408,7 +408,7 @@ export class WordPressAdapter {
       const mediaResponse = await this.uploadMedia(image.url, image.alt);
       if (mediaResponse.success && mediaResponse.data) {
         await this.client.patch(`/${postType}/${postId}`, {
-          featured_media: mediaResponse.data.id
+          featured_media: mediaResponse.data.id,
         });
       }
     } catch (error) {
@@ -426,7 +426,7 @@ export class WordPressAdapter {
           // Store FAQs as custom fields
           wpData.meta = {
             ...wpData.meta,
-            faq_items: JSON.stringify(content.faqs)
+            faq_items: JSON.stringify(content.faqs),
           };
         }
         break;
@@ -435,7 +435,7 @@ export class WordPressAdapter {
         if (content.specifications) {
           wpData.meta = {
             ...wpData.meta,
-            product_specifications: JSON.stringify(content.specifications)
+            product_specifications: JSON.stringify(content.specifications),
           };
         }
         break;
@@ -445,7 +445,7 @@ export class WordPressAdapter {
           wpData.meta = {
             ...wpData.meta,
             ...(content.ctaText && { cta_text: content.ctaText }),
-            ...(content.ctaUrl && { cta_url: content.ctaUrl })
+            ...(content.ctaUrl && { cta_url: content.ctaUrl }),
           };
         }
         break;
@@ -480,7 +480,7 @@ export class WordPressAdapter {
       { id: 'status', name: 'Status', type: 'select', required: false },
       { id: 'categories', name: 'Categories', type: 'multi-reference', required: false },
       { id: 'tags', name: 'Tags', type: 'multi-reference', required: false },
-      { id: 'featured_media', name: 'Featured Image', type: 'image', required: false }
+      { id: 'featured_media', name: 'Featured Image', type: 'image', required: false },
     ];
 
     if (postType === 'pages') {
@@ -500,7 +500,7 @@ export class WordPressAdapter {
       return {
         success: true,
         platform: 'wordpress',
-        message: 'Content deleted successfully from WordPress'
+        message: 'Content deleted successfully from WordPress',
       };
 
     } catch (error: any) {
@@ -508,7 +508,7 @@ export class WordPressAdapter {
         success: false,
         platform: 'wordpress',
         message: 'Failed to delete content from WordPress',
-        errors: [error.response?.data?.message || error.message]
+        errors: [error.response?.data?.message || error.message],
       };
     }
   }

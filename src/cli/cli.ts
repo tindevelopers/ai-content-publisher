@@ -87,7 +87,7 @@ async function initializePublisher(): Promise<AIContentPublisher> {
       await publisher.configureWebflow(
         config.webflow.apiKey,
         config.webflow.siteId,
-        config.webflow.defaultCollectionId
+        config.webflow.defaultCollectionId,
       );
     }
 
@@ -98,8 +98,8 @@ async function initializePublisher(): Promise<AIContentPublisher> {
         config.wordpress.password,
         {
           defaultCategory: config.wordpress.defaultCategory,
-          defaultAuthor: config.wordpress.defaultAuthor
-        }
+          defaultAuthor: config.wordpress.defaultAuthor,
+        },
       );
     }
 

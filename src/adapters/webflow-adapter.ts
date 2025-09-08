@@ -2,9 +2,9 @@
  * Webflow adapter for publishing AI-generated content
  */
 
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { WebflowConfig, APIResponse, RequestOptions } from '../types/config';
-import { AIContent, PublishResult, Collection, CollectionField } from '../types/content';
+import { AIContent, PublishResult, Collection } from '../types/content';
 
 export class WebflowAdapter {
   private client: AxiosInstance;
@@ -25,9 +25,9 @@ export class WebflowAdapter {
         'Authorization': `Bearer ${this.config.apiKey}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'accept-version': '1.0.0'
+        'accept-version': '1.0.0',
       },
-      timeout: 30000
+      timeout: 30000,
     });
   }
 
@@ -40,13 +40,13 @@ export class WebflowAdapter {
       return {
         success: true,
         data: response.data,
-        statusCode: response.status
+        statusCode: response.status,
       };
     } catch (error: any) {
       return {
         success: false,
         error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status
+        statusCode: error.response?.status,
       };
     }
   }
@@ -68,20 +68,20 @@ export class WebflowAdapter {
           name: field.displayName,
           type: field.type,
           required: field.isRequired || false,
-          description: field.helpText
-        })) || []
+          description: field.helpText,
+        })) || [],
       }));
 
       return {
         success: true,
         data: collections,
-        statusCode: response.status
+        statusCode: response.status,
       };
     } catch (error: any) {
       return {
         success: false,
         error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status
+        statusCode: error.response?.status,
       };
     }
   }
@@ -103,20 +103,20 @@ export class WebflowAdapter {
           name: field.displayName,
           type: field.type,
           required: field.isRequired || false,
-          description: field.helpText
-        })) || []
+          description: field.helpText,
+        })) || [],
       };
 
       return {
         success: true,
         data: collection,
-        statusCode: response.status
+        statusCode: response.status,
       };
     } catch (error: any) {
       return {
         success: false,
         error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status
+        statusCode: error.response?.status,
       };
     }
   }
@@ -133,7 +133,7 @@ export class WebflowAdapter {
           success: false,
           platform: 'webflow',
           message: 'Collection ID is required. Set it in content or configuration.',
-          errors: ['COLLECTION_ID_MISSING']
+          errors: ['COLLECTION_ID_MISSING'],
         };
       }
 
@@ -144,7 +144,7 @@ export class WebflowAdapter {
           success: false,
           platform: 'webflow',
           message: 'Failed to fetch collection schema',
-          errors: [collectionResponse.error || 'COLLECTION_FETCH_FAILED']
+          errors: [collectionResponse.error || 'COLLECTION_FETCH_FAILED'],
         };
       }
 
@@ -155,7 +155,7 @@ export class WebflowAdapter {
       const response = await this.client.post(
         `/collections/${collectionId}/items`,
         webflowData,
-        { timeout: options?.timeout }
+        { timeout: options?.timeout },
       );
 
       // Publish the item if status is published
@@ -171,7 +171,7 @@ export class WebflowAdapter {
         contentId: response.data.id,
         url: publishedUrl,
         message: 'Content published successfully to Webflow',
-        publishedAt: new Date()
+        publishedAt: new Date(),
       };
 
     } catch (error: any) {
@@ -179,7 +179,7 @@ export class WebflowAdapter {
         success: false,
         platform: 'webflow',
         message: 'Failed to publish content to Webflow',
-        errors: [error.response?.data?.message || error.message]
+        errors: [error.response?.data?.message || error.message],
       };
     }
   }
@@ -195,7 +195,7 @@ export class WebflowAdapter {
           success: false,
           platform: 'webflow',
           message: 'Collection ID is required for updates',
-          errors: ['COLLECTION_ID_MISSING']
+          errors: ['COLLECTION_ID_MISSING'],
         };
       }
 
@@ -206,7 +206,7 @@ export class WebflowAdapter {
           success: false,
           platform: 'webflow',
           message: 'Failed to fetch collection schema',
-          errors: [collectionResponse.error || 'COLLECTION_FETCH_FAILED']
+          errors: [collectionResponse.error || 'COLLECTION_FETCH_FAILED'],
         };
       }
 
@@ -216,7 +216,7 @@ export class WebflowAdapter {
       // Update the CMS item
       const response = await this.client.patch(
         `/collections/${targetCollectionId}/items/${contentId}`,
-        webflowData
+        webflowData,
       );
 
       return {
@@ -224,7 +224,7 @@ export class WebflowAdapter {
         platform: 'webflow',
         contentId: response.data.id,
         message: 'Content updated successfully in Webflow',
-        publishedAt: new Date()
+        publishedAt: new Date(),
       };
 
     } catch (error: any) {
@@ -232,7 +232,7 @@ export class WebflowAdapter {
         success: false,
         platform: 'webflow',
         message: 'Failed to update content in Webflow',
-        errors: [error.response?.data?.message || error.message]
+        errors: [error.response?.data?.message || error.message],
       };
     }
   }
@@ -243,7 +243,7 @@ export class WebflowAdapter {
   private mapContentToWebflow(content: AIContent, collection: Collection): any {
     const webflowData: any = {
       isArchived: false,
-      isDraft: content.status !== 'published'
+      isDraft: content.status !== 'published',
     };
 
     // Map basic fields
@@ -317,7 +317,7 @@ export class WebflowAdapter {
   private mapField(webflowData: any, collection: Collection, fieldName: string, value: any): void {
     const field = collection.fields.find(f => 
       f.name.toLowerCase() === fieldName.toLowerCase() || 
-      f.id === fieldName
+      f.id === fieldName,
     );
     
     if (field && value !== undefined && value !== null) {
@@ -359,7 +359,7 @@ export class WebflowAdapter {
    */
   private async publishItem(collectionId: string, itemId: string): Promise<void> {
     await this.client.patch(`/collections/${collectionId}/items/${itemId}`, {
-      fields: { isDraft: false }
+      fields: { isDraft: false },
     });
   }
 
@@ -391,7 +391,7 @@ export class WebflowAdapter {
           success: false,
           platform: 'webflow',
           message: 'Collection ID is required for deletion',
-          errors: ['COLLECTION_ID_MISSING']
+          errors: ['COLLECTION_ID_MISSING'],
         };
       }
 
@@ -400,7 +400,7 @@ export class WebflowAdapter {
       return {
         success: true,
         platform: 'webflow',
-        message: 'Content deleted successfully from Webflow'
+        message: 'Content deleted successfully from Webflow',
       };
 
     } catch (error: any) {
@@ -408,7 +408,7 @@ export class WebflowAdapter {
         success: false,
         platform: 'webflow',
         message: 'Failed to delete content from Webflow',
-        errors: [error.response?.data?.message || error.message]
+        errors: [error.response?.data?.message || error.message],
       };
     }
   }

@@ -13,7 +13,7 @@ async function basicExample() {
     await publisher.configureWebflow(
       'your-webflow-api-key',
       'your-site-id',
-      'your-default-collection-id' // Optional
+      'your-default-collection-id', // Optional
     );
 
     // Configure WordPress
@@ -23,8 +23,8 @@ async function basicExample() {
       'your-application-password',
       {
         defaultCategory: 'AI Generated',
-        defaultAuthor: 1
-      }
+        defaultAuthor: 1,
+      },
     );
 
     // Create AI-generated content
@@ -52,15 +52,15 @@ async function basicExample() {
       seo: {
         metaTitle: 'AI Content Creation: The Future is Here',
         metaDescription: 'Discover how AI is revolutionizing content creation with automated writing, SEO optimization, and more.',
-        keywords: ['ai content', 'automated writing', 'content creation', 'artificial intelligence']
+        keywords: ['ai content', 'automated writing', 'content creation', 'artificial intelligence'],
       },
       images: [
         {
           url: 'https://example.com/ai-content-creation.jpg',
           alt: 'AI Content Creation Illustration',
-          caption: 'The future of content creation with AI'
-        }
-      ]
+          caption: 'The future of content creation with AI',
+        },
+      ],
     };
 
     // Publish to Webflow
@@ -96,22 +96,22 @@ async function faqExample() {
       {
         question: 'How accurate is AI-generated content?',
         answer: 'AI-generated content accuracy depends on the training data and model used. Modern AI can produce highly accurate and relevant content when properly configured.',
-        order: 1
+        order: 1,
       },
       {
         question: 'Can AI content rank well in search engines?',
         answer: 'Yes, AI-generated content can rank well if it provides value to users and follows SEO best practices. The key is ensuring the content is helpful and original.',
-        order: 2
+        order: 2,
       },
       {
         question: 'How do I ensure AI content matches my brand voice?',
         answer: 'You can train AI models on your existing content, provide clear style guidelines, and review/edit the output to maintain brand consistency.',
-        order: 3
-      }
+        order: 3,
+      },
     ],
     tags: ['FAQ', 'AI Content', 'Help'],
     categories: ['Support'],
-    status: 'published'
+    status: 'published',
   };
 
   const result = await publisher.publish(faqContent, 'wordpress');
@@ -128,26 +128,26 @@ async function batchPublishExample() {
       type: 'blog',
       title: 'AI Content Creation Tips',
       content: 'Content about AI tips...',
-      status: 'published'
+      status: 'published',
     },
     {
       type: 'article',
       title: 'The Future of Marketing with AI',
       content: 'Content about AI in marketing...',
-      status: 'published'
+      status: 'published',
     },
     {
       type: 'blog',
       title: 'Getting Started with AI Tools',
       content: 'Content about AI tools...',
-      status: 'draft'
-    }
+      status: 'draft',
+    },
   ];
 
   // Batch publish to WordPress
   const results = await publisher.batchPublish(contentItems, 'wordpress', {
     concurrency: 3, // Process 3 items at a time
-    stopOnError: false // Continue even if some items fail
+    stopOnError: false, // Continue even if some items fail
   });
 
   console.log('Batch Publish Results:', results);
@@ -164,7 +164,7 @@ async function contentValidationExample() {
     type: 'blog',
     title: '', // Invalid - empty title
     content: 'Short', // Warning - very short content
-    status: 'published'
+    status: 'published',
   };
 
   // Validate before publishing
@@ -218,5 +218,5 @@ export {
   faqExample,
   batchPublishExample,
   contentValidationExample,
-  collectionManagementExample
+  collectionManagementExample,
 };

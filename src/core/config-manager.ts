@@ -39,9 +39,9 @@ export class ConfigManager {
       type: 'webflow',
       config: {
         ...config,
-        baseUrl: config.baseUrl || 'https://api.webflow.com'
+        baseUrl: config.baseUrl || 'https://api.webflow.com',
       },
-      isConfigured: true
+      isConfigured: true,
     });
   }
 
@@ -55,9 +55,9 @@ export class ConfigManager {
       type: 'wordpress',
       config: {
         ...config,
-        apiVersion: config.apiVersion || 'wp/v2'
+        apiVersion: config.apiVersion || 'wp/v2',
       },
-      isConfigured: true
+      isConfigured: true,
     });
   }
 
@@ -183,13 +183,13 @@ export class ConfigManager {
         // Only export non-sensitive configuration
         ...(platform === 'webflow' && {
           siteId: (config.config as WebflowConfig).siteId,
-          baseUrl: (config.config as WebflowConfig).baseUrl
+          baseUrl: (config.config as WebflowConfig).baseUrl,
         }),
         ...(platform === 'wordpress' && {
           siteUrl: (config.config as WordPressConfig).siteUrl,
           username: (config.config as WordPressConfig).username,
-          apiVersion: (config.config as WordPressConfig).apiVersion
-        })
+          apiVersion: (config.config as WordPressConfig).apiVersion,
+        }),
       };
     });
     
@@ -198,8 +198,8 @@ export class ConfigManager {
       globalConfig: {
         timeout: this.globalConfig.timeout,
         debug: this.globalConfig.debug,
-        retryConfig: this.globalConfig.retryConfig
-      }
+        retryConfig: this.globalConfig.retryConfig,
+      },
     };
   }
 }
