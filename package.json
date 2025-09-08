@@ -31,7 +31,7 @@
     "cms",
     "automation"
   ],
-  "author": "Your Organization",
+  "author": "TIN Developers",
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=8.0.0"
@@ -67,10 +67,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/ai-content-publisher.git"
+    "url": "https://github.com/tindevelopers/ai-content-publisher.git"
   },
   "bugs": {
-    "url": "https://github.com/your-org/ai-content-publisher/issues"
+    "url": "https://github.com/tindevelopers/ai-content-publisher/issues"
   },
-  "homepage": "https://github.com/your-org/ai-content-publisher#readme"
+  "homepage": "https://github.com/tindevelopers/ai-content-publisher#readme"
 }
