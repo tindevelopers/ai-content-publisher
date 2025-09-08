@@ -38,24 +38,29 @@ jobs:
       
     - name: Test CLI functionality
       run: |
-        node dist/cli/cli.js --version
-        node dist/cli/cli.js --help
+        npx tsx src/cli/cli.ts --version
+        npx tsx src/cli/cli.ts --help
         
     - name: Generate changelog
       run: |
-        if ! command -v conventional-changelog &> /dev/null; then
-          npm install -g conventional-changelog-cli
-        fi
-        conventional-changelog -p angular -i CHANGELOG.md -s
+        echo "# Changelog" > CHANGELOG.md
+        echo "" >> CHANGELOG.md
+        echo "## [$(git describe --tags --abbrev=0)] - $(date +'%Y-%m-%d')" >> CHANGELOG.md
+        echo "" >> CHANGELOG.md
+        echo "### Changes" >> CHANGELOG.md
+        git log --oneline --since="$(git describe --tags --abbrev=0 HEAD~1)" --pretty=format:"- %s" >> CHANGELOG.md || echo "- Initial release" >> CHANGELOG.md
         
-    - name: Semantic Release
-      uses: cycjimmy/semantic-release-action@v4
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v1
       with:
-        semantic_version: 21
-        extra_plugins: |
-          @semantic-release/changelog@6.0.3
-          @semantic-release/git@10.0.1
+        files: |
+          README.md
+          GETTING_STARTED.md
+          LICENSE
+          content-examples/**
+        body_path: CHANGELOG.md
+        draft: false
+        prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  

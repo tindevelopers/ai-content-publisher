@@ -15,14 +15,19 @@ A powerful TypeScript SDK for publishing AI-generated content to Webflow and Wor
 
 ## Installation
 
+Clone the repository and install dependencies:
+
 ```bash
-npm install ai-content-publisher
+git clone https://github.com/tindevelopers/ai-content-publisher.git
+cd ai-content-publisher
+npm install
+npm run build
 ```
 
 ## Quick Start
 
 ```typescript
-import { AIContentPublisher, AIContent } from 'ai-content-publisher';
+import { AIContentPublisher, AIContent } from './src/index';
 
 // Initialize the publisher
 const publisher = new AIContentPublisher();

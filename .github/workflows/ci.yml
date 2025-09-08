@@ -36,8 +36,8 @@ jobs:
     - name: Build project
       run: npm run build
       
-    - name: Test CLI
-      run: node dist/cli/cli.js --help
+    - name: Test CLI (TypeScript)
+      run: npx tsx src/cli/cli.ts --help
 
   security:
     runs-on: ubuntu-latest

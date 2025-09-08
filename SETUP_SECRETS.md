@@ -27,16 +27,7 @@ Your AI Content Publisher SDK is now live on GitHub! Here's what you need to set
 
 To enable full automation, you need to set up these GitHub secrets:
 
-### 1. NPM Publishing
-Go to: https://github.com/tindevelopers/ai-content-publisher/settings/secrets/actions
-
-**NPM_TOKEN**
-1. Go to [npmjs.com](https://www.npmjs.com) and log in
-2. Go to Access Tokens: https://www.npmjs.com/settings/tokens
-3. Click "Generate New Token" → "Automation"
-4. Copy the token and add as GitHub secret `NPM_TOKEN`
-
-### 2. Vercel Deployment
+### 1. Vercel Deployment
 **VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID**
 
 1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
@@ -59,7 +50,7 @@ Go to: https://github.com/tindevelopers/ai-content-publisher/settings/secrets/ac
      - `VERCEL_ORG_ID` (from General settings)
      - `VERCEL_PROJECT_ID` (from General settings)
 
-### 3. Optional: Test Coverage
+### 2. Optional: Test Coverage
 **CODECOV_TOKEN**
 1. Go to [Codecov.io](https://codecov.io)
 2. Sign in with GitHub
@@ -72,7 +63,6 @@ Add these secrets at: https://github.com/tindevelopers/ai-content-publisher/sett
 
 | Secret Name | Description | Required |
 |-------------|-------------|----------|
-| `NPM_TOKEN` | NPM automation token | ✅ Yes |
 | `VERCEL_TOKEN` | Vercel deployment token | ✅ Yes |
 | `VERCEL_ORG_ID` | Vercel organization ID | ✅ Yes |
 | `VERCEL_PROJECT_ID` | Vercel project ID | ✅ Yes |
@@ -87,10 +77,9 @@ Add these secrets at: https://github.com/tindevelopers/ai-content-publisher/sett
 - Test coverage reports (if Codecov configured)
 
 ### 🏷️ When you create version tags:
-- Semantic release creates GitHub releases
-- NPM package published automatically
-- Docker image built and pushed to GitHub Container Registry
-- Changelog updated automatically
+- GitHub releases created with changelog
+- Source code packaged and attached to release
+- Documentation updated automatically
 
 ### 📚 Documentation:
 - Auto-deploys to Vercel at your custom domain
@@ -99,20 +88,12 @@ Add these secrets at: https://github.com/tindevelopers/ai-content-publisher/sett
 
 ## 🔧 Immediate Next Steps
 
-1. **Set up NPM publishing:**
-   ```bash
-   # Add NPM_TOKEN secret to GitHub
-   # Then tag a release to trigger publishing
-   git tag v1.0.1
-   git push origin v1.0.1
-   ```
-
-2. **Set up Vercel deployment:**
+1. **Set up Vercel deployment:**
    - Import repository to Vercel
    - Add Vercel secrets to GitHub
    - Documentation will auto-deploy
 
-3. **Test the automation:**
+2. **Test the automation:**
    - Make a small change
    - Push to main
    - Watch workflows run
@@ -123,9 +104,9 @@ Add these secrets at: https://github.com/tindevelopers/ai-content-publisher/sett
 - View workflows: https://github.com/tindevelopers/ai-content-publisher/actions
 - Monitor releases: https://github.com/tindevelopers/ai-content-publisher/releases
 
-### NPM Package:
-- Will be available at: https://www.npmjs.com/package/ai-content-publisher
-- Install with: `npm install ai-content-publisher`
+### Source Code:
+- Available at: https://github.com/tindevelopers/ai-content-publisher
+- Clone with: `git clone https://github.com/tindevelopers/ai-content-publisher.git`
 
 ### Documentation:
 - Will be available at your Vercel domain
@@ -138,10 +119,10 @@ Add these secrets at: https://github.com/tindevelopers/ai-content-publisher/sett
 2. Verify all required secrets are set
 3. Ensure secret values are correct (no extra spaces)
 
-### NPM Publishing Issues:
-- Verify NPM_TOKEN has automation permissions
-- Check if package name is available
-- Ensure you're a member of the organization (if applicable)
+### GitHub Release Issues:
+- Verify repository permissions
+- Check if tag format is correct (v1.0.0)
+- Ensure release workflow has necessary permissions
 
 ### Vercel Deployment Issues:
 - Verify build command is correct
@@ -152,9 +133,9 @@ Add these secrets at: https://github.com/tindevelopers/ai-content-publisher/sett
 
 You'll know everything is working when:
 - ✅ GitHub Actions show green checkmarks
-- ✅ NPM package appears at npmjs.com
 - ✅ Vercel documentation site loads
 - ✅ GitHub releases are created automatically
+- ✅ Source code is accessible and buildable
 
 ## 📞 Support
 
@@ -168,4 +149,4 @@ If you encounter issues:
 
 **Your AI Content Publisher SDK is ready for the world!** 🚀
 
-Once the secrets are configured, you'll have a fully automated CI/CD pipeline with documentation deployment and package publishing.
+Once the secrets are configured, you'll have a fully automated CI/CD pipeline with documentation deployment and GitHub releases.

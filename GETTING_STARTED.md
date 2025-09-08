@@ -4,14 +4,19 @@
 
 ### 1. Installation
 
+Clone the repository and install dependencies:
+
 ```bash
-npm install ai-content-publisher
+git clone https://github.com/tindevelopers/ai-content-publisher.git
+cd ai-content-publisher
+npm install
+npm run build
 ```
 
 ### 2. Basic Usage (Programmatic)
 
 ```typescript
-import { AIContentPublisher, AIContent } from 'ai-content-publisher';
+import { AIContentPublisher, AIContent } from './src/index';
 
 // Initialize the publisher
 const publisher = new AIContentPublisher();
@@ -48,23 +53,23 @@ Configure your platforms:
 
 ```bash
 # Configure Webflow
-ai-publisher config --webflow-key="your-api-key" --webflow-site="your-site-id"
+npx tsx src/cli/cli.ts config --webflow-key="your-api-key" --webflow-site="your-site-id"
 
 # Configure WordPress
-ai-publisher config --wp-url="https://yoursite.com" --wp-username="admin" --wp-password="your-app-password"
+npx tsx src/cli/cli.ts config --wp-url="https://yoursite.com" --wp-username="admin" --wp-password="your-app-password"
 ```
 
 Check your configuration:
 
 ```bash
-ai-publisher status
+npx tsx src/cli/cli.ts status
 ```
 
 Publish content from a JSON file:
 
 ```bash
-ai-publisher publish --file="content-examples/blog-post.json" --platform="webflow"
-ai-publisher publish --file="content-examples/faq.json" --platform="both"
+npx tsx src/cli/cli.ts publish --file="content-examples/blog-post.json" --platform="webflow"
+npx tsx src/cli/cli.ts publish --file="content-examples/faq.json" --platform="both"
 ```
 
 ### 4. Content Examples
@@ -128,23 +133,23 @@ ai-publisher publish --file="content-examples/faq.json" --platform="both"
 
 ```bash
 # Configuration
-ai-publisher config --help
+npx tsx src/cli/cli.ts config --help
 
 # Publishing
-ai-publisher publish --file="content.json" --platform="webflow"
-ai-publisher publish --file="content.json" --platform="wordpress"
-ai-publisher publish --file="content.json" --platform="both"
+npx tsx src/cli/cli.ts publish --file="content.json" --platform="webflow"
+npx tsx src/cli/cli.ts publish --file="content.json" --platform="wordpress"
+npx tsx src/cli/cli.ts publish --file="content.json" --platform="both"
 
 # Testing
-ai-publisher test
-ai-publisher test --platform="webflow"
+npx tsx src/cli/cli.ts test
+npx tsx src/cli/cli.ts test --platform="webflow"
 
 # Collections
-ai-publisher collections
-ai-publisher collections --platform="wordpress"
+npx tsx src/cli/cli.ts collections
+npx tsx src/cli/cli.ts collections --platform="wordpress"
 
 # Status
-ai-publisher status
+npx tsx src/cli/cli.ts status
 ```
 
 ### 7. Content Validation
@@ -239,7 +244,7 @@ const content: AIContent = {
 
 - Check the README.md for detailed API documentation
 - Look at the examples in `src/examples/basic-usage.ts`
-- Test your content with `ai-publisher publish --validate-only`
-- Use `ai-publisher test` to verify your platform connections
+- Test your content with `npx tsx src/cli/cli.ts publish --validate-only`
+- Use `npx tsx src/cli/cli.ts test` to verify your platform connections
 
 Happy publishing! 🚀
