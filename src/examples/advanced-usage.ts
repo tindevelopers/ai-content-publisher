@@ -22,7 +22,7 @@ export async function testAndOptimizeContent() {
   const publisher = new AIContentPublisher();
   
   // Configure platforms
-  await publisher.configureWebflow('your-webflow-api-key', 'your-site-id');
+  await publisher.configureWebflow('your-webflow-api-key-placeholder', 'your-site-id');
   await publisher.configureLinkedIn('your-linkedin-access-token', 'your-user-id');
   await publisher.configureTwitter('api-key', 'api-secret', 'access-token', 'access-token-secret');
 
@@ -79,7 +79,7 @@ export async function scheduleContentExample() {
   const publisher = new AIContentPublisher();
   
   // Configure platforms
-  await publisher.configureWebflow('your-webflow-api-key', 'your-site-id');
+  await publisher.configureWebflow('your-webflow-api-key-placeholder', 'your-site-id');
   await publisher.configureLinkedIn('your-linkedin-access-token', 'your-user-id');
 
   // Configure scheduler
@@ -161,7 +161,7 @@ export async function bulkPublishingExample() {
   const publisher = new AIContentPublisher();
   
   // Configure platforms
-  await publisher.configureWebflow('your-webflow-api-key', 'your-site-id');
+  await publisher.configureWebflow('your-webflow-api-key-placeholder', 'your-site-id');
   await publisher.configureLinkedIn('your-linkedin-access-token', 'your-user-id');
   await publisher.configureTwitter('api-key', 'api-secret', 'access-token', 'access-token-secret');
 
@@ -254,7 +254,7 @@ export async function comprehensiveContentManagement() {
   const publisher = new AIContentPublisher();
   
   // Configure all platforms
-  await publisher.configureWebflow('your-webflow-api-key', 'your-site-id');
+  await publisher.configureWebflow('your-webflow-api-key-placeholder', 'your-site-id');
   await publisher.configureLinkedIn('your-linkedin-access-token', 'your-user-id');
   await publisher.configureTwitter('api-key', 'api-secret', 'access-token', 'access-token-secret');
   await publisher.configureMedium('your-medium-access-token', 'your-user-id');
@@ -349,7 +349,7 @@ export async function contentCampaignExample() {
   const publisher = new AIContentPublisher();
   
   // Configure platforms for a content campaign
-  await publisher.configureWebflow('your-webflow-api-key', 'your-site-id');
+  await publisher.configureWebflow('your-webflow-api-key-placeholder', 'your-site-id');
   await publisher.configureLinkedIn('your-linkedin-access-token', 'your-user-id');
   await publisher.configureTwitter('api-key', 'api-secret', 'access-token', 'access-token-secret');
   await publisher.configureMedium('your-medium-access-token', 'your-user-id');

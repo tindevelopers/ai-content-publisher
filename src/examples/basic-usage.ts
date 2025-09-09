@@ -11,7 +11,7 @@ async function basicExample() {
   try {
     // Configure Webflow
     await publisher.configureWebflow(
-      'your-webflow-api-key',
+      'your-webflow-api-key-placeholder',
       'your-site-id',
       'your-default-collection-id', // Optional
     );

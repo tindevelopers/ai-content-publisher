@@ -27,7 +27,7 @@ describe('AIContentPublisher', () => {
         .mockImplementation(() => mockWebflowAdapter);
 
       await expect(
-        publisher.configureWebflow('test-api-key', 'test-site-id'),
+        publisher.configureWebflow('a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef1234567890', 'test-site-id'),
       ).resolves.not.toThrow();
 
       expect(publisher.getConfigurationStatus().webflow).toBe(true);
@@ -134,7 +134,7 @@ describe('AIContentPublisher', () => {
     });
 
     it('should publish to Webflow', async () => {
-      await publisher.configureWebflow('test-key', 'test-site');
+      await publisher.configureWebflow('a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef1234567890', 'test-site');
       
       const result = await publisher.publish(validContent, 'webflow');
       
@@ -154,7 +154,7 @@ describe('AIContentPublisher', () => {
     });
 
     it('should publish to multiple platforms', async () => {
-      await publisher.configureWebflow('test-key', 'test-site');
+      await publisher.configureWebflow('a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef1234567890', 'test-site');
       await publisher.configureWordPress('https://test.com', 'user', 'pass');
       
       const results = await publisher.publishToMultiple(validContent, ['webflow', 'wordpress']);
@@ -262,6 +262,11 @@ describe('AIContentPublisher', () => {
       expect(status).toEqual({
         webflow: false,
         wordpress: false,
+        ghost: false,
+        medium: false,
+        linkedin: false,
+        twitter: false,
+        substack: false,
       });
     });
 
