@@ -6,6 +6,15 @@ import axios, { AxiosInstance } from 'axios';
 import { MediumConfig, APIResponse } from '../types/config';
 import { AIContent, PublishResult, Collection } from '../types/content';
 
+interface ErrorResponse {
+  response?: {
+    data?: {
+      message?: string;
+    };
+    status?: number;
+  };
+}
+
 export class MediumAdapter {
   private client: AxiosInstance;
   private config: MediumConfig;
@@ -44,8 +53,8 @@ export class MediumAdapter {
     } catch (error: unknown) {
       return {
         success: false,
-        error: (error as any).response?.data?.message || (error as Error).message,
-        statusCode: (error as any).response?.status,
+        error: (error as ErrorResponse).response?.data?.message || (error as Error).message,
+        statusCode: (error as ErrorResponse).response?.status,
       };
     }
   }
@@ -72,7 +81,7 @@ export class MediumAdapter {
       return {
         success: false,
         message: 'Failed to publish to Medium',
-        errors: [(error as any).response?.data?.message || (error as Error).message],
+        errors: [(error as ErrorResponse).response?.data?.message || (error as Error).message],
         platform: 'medium',
       };
     }
@@ -153,7 +162,7 @@ export class MediumAdapter {
       return {
         success: false,
         message: 'Failed to publish to Medium publication',
-        errors: [(error as any).response?.data?.message || (error as Error).message],
+        errors: [(error as ErrorResponse).response?.data?.message || (error as Error).message],
         platform: 'medium',
       };
     }
@@ -173,8 +182,8 @@ export class MediumAdapter {
     } catch (error: unknown) {
       return {
         success: false,
-        error: (error as any).response?.data?.message || (error as Error).message,
-        statusCode: (error as any).response?.status,
+        error: (error as ErrorResponse).response?.data?.message || (error as Error).message,
+        statusCode: (error as ErrorResponse).response?.status,
       };
     }
   }
@@ -200,7 +209,7 @@ export class MediumAdapter {
       return {
         success: false,
         message: 'Failed to update Medium post',
-        errors: [(error as any).response?.data?.message || (error as Error).message],
+        errors: [(error as ErrorResponse).response?.data?.message || (error as Error).message],
         platform: 'medium',
       };
     }
@@ -243,8 +252,8 @@ export class MediumAdapter {
     } catch (error: unknown) {
       return {
         success: false,
-        error: (error as any).response?.data?.message || (error as Error).message,
-        statusCode: (error as any).response?.status,
+        error: (error as ErrorResponse).response?.data?.message || (error as Error).message,
+        statusCode: (error as ErrorResponse).response?.status,
       };
     }
   }

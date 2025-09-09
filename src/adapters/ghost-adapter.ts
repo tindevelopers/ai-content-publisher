@@ -15,6 +15,20 @@ interface ErrorResponse {
   };
 }
 
+interface GhostPost {
+  title: string;
+  html: string;
+  status: 'published' | 'draft';
+  published_at?: string;
+  excerpt?: string;
+  meta_title?: string;
+  meta_description?: string;
+  tags?: Array<{ name: string }>;
+  authors?: string[];
+  featured?: boolean;
+  featured_image?: string;
+}
+
 export class GhostAdapter {
   private client: AxiosInstance;
   private config: GhostConfig;
@@ -93,8 +107,8 @@ export class GhostAdapter {
   /**
    * Transform AIContent to Ghost post format
    */
-  private transformToGhostPost(content: AIContent): any {
-    const ghostPost: any = {
+  private transformToGhostPost(content: AIContent): GhostPost {
+    const ghostPost: GhostPost = {
       title: content.title,
       html: content.content,
       status: content.status === 'published' ? 'published' : 'draft',
@@ -117,7 +131,7 @@ export class GhostAdapter {
     }
 
     if (content.ghostAuthor) {
-      ghostPost.authors = [{ name: content.ghostAuthor }];
+      ghostPost.authors = [content.ghostAuthor];
     }
 
     // Add SEO data
@@ -128,7 +142,7 @@ export class GhostAdapter {
 
     // Add featured image
     if (content.images && content.images.length > 0) {
-      ghostPost.feature_image = content.images[0].url;
+      ghostPost.featured_image = content.images[0].url;
     }
 
     return ghostPost;

@@ -182,7 +182,7 @@ export class TwitterAdapter {
   /**
    * Upload media to Twitter
    */
-  async uploadMedia(_mediaUrl: string): Promise<string> {
+  async uploadMedia(): Promise<string> {
     // This would require implementing media upload functionality
     // For now, return a placeholder
     return 'media_id_placeholder';

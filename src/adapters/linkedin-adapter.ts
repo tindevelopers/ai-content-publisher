@@ -6,6 +6,15 @@ import axios, { AxiosInstance } from 'axios';
 import { LinkedInConfig, APIResponse } from '../types/config';
 import { AIContent, PublishResult } from '../types/content';
 
+interface ErrorResponse {
+  response?: {
+    data?: {
+      message?: string;
+    };
+    status?: number;
+  };
+}
+
 export class LinkedInAdapter {
   private client: AxiosInstance;
   private config: LinkedInConfig;
@@ -41,11 +50,11 @@ export class LinkedInAdapter {
         data: response.data,
         statusCode: response.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status,
+        error: (error as ErrorResponse).response?.data?.message || (error as Error).message,
+        statusCode: (error as ErrorResponse).response?.status,
       };
     }
   }
@@ -60,11 +69,11 @@ export class LinkedInAdapter {
       } else {
         return await this.publishPost(content);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
         message: 'Failed to publish to LinkedIn',
-        errors: [error.response?.data?.message || error.message],
+        errors: [(error as ErrorResponse).response?.data?.message || (error as Error).message],
         platform: 'linkedin',
       };
     }
@@ -204,11 +213,11 @@ export class LinkedInAdapter {
         platform: 'linkedin',
         publishedAt: new Date(),
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
         message: 'Failed to publish to LinkedIn organization',
-        errors: [error.response?.data?.message || error.message],
+        errors: [(error as ErrorResponse).response?.data?.message || (error as Error).message],
         platform: 'linkedin',
       };
     }
@@ -225,11 +234,11 @@ export class LinkedInAdapter {
         data: response.data,
         statusCode: response.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status,
+        error: (error as ErrorResponse).response?.data?.message || (error as Error).message,
+        statusCode: (error as ErrorResponse).response?.status,
       };
     }
   }
@@ -252,11 +261,11 @@ export class LinkedInAdapter {
         data: response.data,
         statusCode: response.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status,
+        error: (error as ErrorResponse).response?.data?.message || (error as Error).message,
+        statusCode: (error as ErrorResponse).response?.status,
       };
     }
   }
@@ -271,11 +280,11 @@ export class LinkedInAdapter {
       try {
         const result = await this.publishContent(content);
         results.push(result);
-      } catch (error: any) {
+      } catch (error: unknown) {
         results.push({
           success: false,
           message: 'Failed to publish content',
-          errors: [error.message],
+          errors: [(error as Error).message],
           platform: 'linkedin',
         });
       }
