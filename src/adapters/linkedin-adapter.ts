@@ -74,82 +74,74 @@ export class LinkedInAdapter {
    * Publish a LinkedIn article
    */
   private async publishArticle(content: AIContent): Promise<PublishResult> {
-    try {
-      const response = await this.client.post('/ugcPosts', {
-        author: `urn:li:person:${this.config.userId}`,
-        lifecycleState: 'PUBLISHED',
-        specificContent: {
-          'com.linkedin.ugc.ShareContent': {
-            shareCommentary: {
-              text: content.excerpt || content.title,
-            },
-            shareMediaCategory: 'ARTICLE',
-            media: [
-              {
-                status: 'READY',
-                description: {
-                  text: content.excerpt || '',
-                },
-                originalUrl: content.seo?.canonicalUrl || '',
-                title: {
-                  text: content.title,
-                },
-              },
-            ],
+    const response = await this.client.post('/ugcPosts', {
+      author: `urn:li:person:${this.config.userId}`,
+      lifecycleState: 'PUBLISHED',
+      specificContent: {
+        'com.linkedin.ugc.ShareContent': {
+          shareCommentary: {
+            text: content.excerpt || content.title,
           },
+          shareMediaCategory: 'ARTICLE',
+          media: [
+            {
+              status: 'READY',
+              description: {
+                text: content.excerpt || '',
+              },
+              originalUrl: content.seo?.canonicalUrl || '',
+              title: {
+                text: content.title,
+              },
+            },
+          ],
         },
-        visibility: {
-          'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC',
-        },
-      });
+      },
+      visibility: {
+        'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC',
+      },
+    });
 
-      return {
-        success: true,
-        contentId: response.data.id,
-        url: `https://www.linkedin.com/feed/update/${response.data.id}`,
-        message: 'Article published successfully to LinkedIn',
-        platform: 'linkedin',
-        publishedAt: new Date(),
-      };
-    } catch (error: any) {
-      throw error;
-    }
+    return {
+      success: true,
+      contentId: response.data.id,
+      url: `https://www.linkedin.com/feed/update/${response.data.id}`,
+      message: 'Article published successfully to LinkedIn',
+      platform: 'linkedin',
+      publishedAt: new Date(),
+    };
   }
 
   /**
    * Publish a LinkedIn post
    */
   private async publishPost(content: AIContent): Promise<PublishResult> {
-    try {
-      const postData = {
-        author: `urn:li:person:${this.config.userId}`,
-        lifecycleState: 'PUBLISHED',
-        specificContent: {
-          'com.linkedin.ugc.ShareContent': {
-            shareCommentary: {
-              text: this.formatLinkedInPost(content),
-            },
-            shareMediaCategory: 'NONE',
+    const postData = {
+      author: `urn:li:person:${this.config.userId}`,
+      lifecycleState: 'PUBLISHED',
+      specificContent: {
+        'com.linkedin.ugc.ShareContent': {
+          shareCommentary: {
+            text: this.formatLinkedInPost(content),
           },
+          shareMediaCategory: 'NONE',
         },
-        visibility: {
-          'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC',
-        },
-      };
+      },
+      visibility: {
+        'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC',
+      },
+    };
 
-      const response = await this.client.post('/ugcPosts', postData);
+    const response = await this.client.post('/ugcPosts', postData);
 
-      return {
-        success: true,
-        contentId: response.data.id,
-        url: `https://www.linkedin.com/feed/update/${response.data.id}`,
-        message: 'Post published successfully to LinkedIn',
-        platform: 'linkedin',
-        publishedAt: new Date(),
-      };
-    } catch (error: any) {
-      throw error;
-    }
+    return {
+      success: true,
+      contentId: response.data.id,
+      url: `https://www.linkedin.com/feed/update/${response.data.id}`,
+      message: 'Post published successfully to LinkedIn',
+      platform: 'linkedin',
+      publishedAt: new Date(),
+    };
   }
 
   /**

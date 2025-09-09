@@ -73,68 +73,60 @@ export class SubstackAdapter {
    * Publish a newsletter issue
    */
   private async publishNewsletter(content: AIContent): Promise<PublishResult> {
-    try {
-      if (!content.newsletter) {
-        throw new Error('Newsletter content is required for newsletter publishing');
-      }
-
-      const newsletterData = {
-        title: content.newsletter.subject,
-        subtitle: content.excerpt || '',
-        body_html: this.formatNewsletterContent(content.newsletter),
-        preview_text: content.newsletter.previewText || content.excerpt,
-        section_id: content.substackSection || this.config.defaultSection,
-        send_email: content.status === 'published',
-        send_push: content.status === 'published',
-        send_web: true,
-        tags: content.tags || [],
-      };
-
-      const response = await this.client.post(`/publications/${this.config.publicationId}/posts`, newsletterData);
-
-      return {
-        success: true,
-        contentId: response.data.id,
-        url: response.data.web_url,
-        message: 'Newsletter published successfully to Substack',
-        platform: 'substack',
-        publishedAt: new Date(response.data.created_at),
-      };
-    } catch (error: unknown) {
-      throw error;
+    if (!content.newsletter) {
+      throw new Error('Newsletter content is required for newsletter publishing');
     }
+
+    const newsletterData = {
+      title: content.newsletter.subject,
+      subtitle: content.excerpt || '',
+      body_html: this.formatNewsletterContent(content.newsletter),
+      preview_text: content.newsletter.previewText || content.excerpt,
+      section_id: content.substackSection || this.config.defaultSection,
+      send_email: content.status === 'published',
+      send_push: content.status === 'published',
+      send_web: true,
+      tags: content.tags || [],
+    };
+
+    const response = await this.client.post(`/publications/${this.config.publicationId}/posts`, newsletterData);
+
+    return {
+      success: true,
+      contentId: response.data.id,
+      url: response.data.web_url,
+      message: 'Newsletter published successfully to Substack',
+      platform: 'substack',
+      publishedAt: new Date(response.data.created_at),
+    };
   }
 
   /**
    * Publish a regular post
    */
   private async publishPost(content: AIContent): Promise<PublishResult> {
-    try {
-      const postData = {
-        title: content.title,
-        subtitle: content.excerpt || '',
-        body_html: content.content,
-        preview_text: content.excerpt,
-        section_id: content.substackSection || this.config.defaultSection,
-        send_email: false,
-        send_push: false,
-        send_web: true,
-        tags: content.tags || [],
-      };
+    const postData = {
+      title: content.title,
+      subtitle: content.excerpt || '',
+      body_html: content.content,
+      preview_text: content.excerpt,
+      section_id: content.substackSection || this.config.defaultSection,
+      send_email: false,
+      send_push: false,
+      send_web: true,
+      tags: content.tags || [],
+    };
 
-      const response = await this.client.post(`/publications/${this.config.publicationId}/posts`, postData);
+    const response = await this.client.post(`/publications/${this.config.publicationId}/posts`, postData);
 
-      return {
-        success: true,
-        contentId: response.data.id,
-        url: response.data.web_url,
-        message: 'Post published successfully to Substack',
-        platform: 'substack',
-        publishedAt: new Date(response.data.created_at),
-      };
-    } catch (error: unknown) {
-      throw error;
-    }
+    return {
+      success: true,
+      contentId: response.data.id,
+      url: response.data.web_url,
+      message: 'Post published successfully to Substack',
+      platform: 'substack',
+      publishedAt: new Date(response.data.created_at),
+    };
   }
 
   /**
