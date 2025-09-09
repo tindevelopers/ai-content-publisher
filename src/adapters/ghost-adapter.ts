@@ -6,6 +6,15 @@ import axios, { AxiosInstance } from 'axios';
 import { GhostConfig, APIResponse } from '../types/config';
 import { AIContent, PublishResult, Collection } from '../types/content';
 
+interface ErrorResponse {
+  response?: {
+    data?: {
+      message?: string;
+    };
+    status?: number;
+  };
+}
+
 export class GhostAdapter {
   private client: AxiosInstance;
   private config: GhostConfig;
@@ -43,8 +52,8 @@ export class GhostAdapter {
     } catch (error: unknown) {
       return {
         success: false,
-        error: (error as any).response?.data?.message || (error as Error).message,
-        statusCode: (error as any).response?.status,
+        error: (error as ErrorResponse).response?.data?.message || (error as Error).message,
+        statusCode: (error as ErrorResponse).response?.status,
       };
     }
   }
@@ -75,7 +84,7 @@ export class GhostAdapter {
       return {
         success: false,
         message: 'Failed to publish to Ghost',
-        errors: [(error as any).response?.data?.message || (error as Error).message],
+        errors: [(error as ErrorResponse).response?.data?.message || (error as Error).message],
         platform: 'ghost',
       };
     }
@@ -157,8 +166,8 @@ export class GhostAdapter {
     } catch (error: unknown) {
       return {
         success: false,
-        error: (error as any).response?.data?.message || (error as Error).message,
-        statusCode: (error as any).response?.status,
+        error: (error as ErrorResponse).response?.data?.message || (error as Error).message,
+        statusCode: (error as ErrorResponse).response?.status,
       };
     }
   }
@@ -188,7 +197,7 @@ export class GhostAdapter {
       return {
         success: false,
         message: 'Failed to update Ghost post',
-        errors: [(error as any).response?.data?.message || (error as Error).message],
+        errors: [(error as ErrorResponse).response?.data?.message || (error as Error).message],
         platform: 'ghost',
       };
     }
@@ -208,8 +217,8 @@ export class GhostAdapter {
     } catch (error: unknown) {
       return {
         success: false,
-        error: (error as any).response?.data?.message || (error as Error).message,
-        statusCode: (error as any).response?.status,
+        error: (error as ErrorResponse).response?.data?.message || (error as Error).message,
+        statusCode: (error as ErrorResponse).response?.status,
       };
     }
   }

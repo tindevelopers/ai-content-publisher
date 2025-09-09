@@ -121,8 +121,8 @@ export class ContentManager {
     if (this.config.autoTest) {
       const testResults = await this.testContentForAllPlatforms(content, platforms);
       const incompatiblePlatforms = Array.from(testResults.entries())
-        .filter(([_platform, result]) => !result.isCompatible)
-        .map(([platform, _result]) => platform);
+        .filter(([, result]) => !result.isCompatible)
+        .map(([platform]) => platform);
 
       if (incompatiblePlatforms.length > 0) {
         console.warn(`Content may not be optimal for: ${incompatiblePlatforms.join(', ')}`);
@@ -301,8 +301,8 @@ export class ContentManager {
   private getAvailablePlatforms(): PlatformType[] {
     const status = this.publisher.getConfigurationStatus();
     return Object.entries(status)
-      .filter(([_platform, isConfigured]) => isConfigured)
-      .map(([platform, _isConfigured]) => platform as PlatformType);
+      .filter(([, isConfigured]) => isConfigured)
+      .map(([platform]) => platform as PlatformType);
   }
 
   /**

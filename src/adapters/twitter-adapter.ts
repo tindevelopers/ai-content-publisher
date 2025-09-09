@@ -183,13 +183,9 @@ export class TwitterAdapter {
    * Upload media to Twitter
    */
   async uploadMedia(_mediaUrl: string): Promise<string> {
-    try {
-      // This would require implementing media upload functionality
-      // For now, return a placeholder
-      return 'media_id_placeholder';
-    } catch (error: unknown) {
-      throw new Error(`Failed to upload media: ${(error as Error).message}`);
-    }
+    // This would require implementing media upload functionality
+    // For now, return a placeholder
+    return 'media_id_placeholder';
   }
 
   /**
