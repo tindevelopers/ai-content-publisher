@@ -11,7 +11,7 @@ import {
   LinkedInConfig,
   TwitterConfig,
   SubstackConfig,
-  PlatformConfig 
+  PlatformConfig, 
 } from '../types/config';
 
 export class ConfigManager {

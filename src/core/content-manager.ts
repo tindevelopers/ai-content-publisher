@@ -6,7 +6,7 @@ import { AIContent, PlatformType, PublishResult } from '../types/content';
 import { AIContentPublisher } from './ai-content-publisher';
 import { ContentTester, ContentTestResult } from './content-tester';
 import { ContentScheduler, QueuedContent, ScheduleConfig } from './content-scheduler';
-import { BulkPublisher, BulkPublishItem, BulkPublishConfig, BulkPublishResult } from './bulk-publisher';
+import { BulkPublisher, BulkPublishItem, BulkPublishConfig } from './bulk-publisher';
 
 export interface ContentManagerConfig {
   publisher: AIContentPublisher;
@@ -57,7 +57,7 @@ export class ContentManager {
         platforms: ['webflow', 'wordpress'],
         concurrency: 3,
         autoTest: true,
-      }
+      },
     );
 
     // Initialize scheduler if config provided
@@ -121,8 +121,8 @@ export class ContentManager {
     if (this.config.autoTest) {
       const testResults = await this.testContentForAllPlatforms(content, platforms);
       const incompatiblePlatforms = Array.from(testResults.entries())
-        .filter(([_, result]) => !result.isCompatible)
-        .map(([platform, _]) => platform);
+        .filter(([_platform, result]) => !result.isCompatible)
+        .map(([platform, _result]) => platform);
 
       if (incompatiblePlatforms.length > 0) {
         console.warn(`Content may not be optimal for: ${incompatiblePlatforms.join(', ')}`);
@@ -301,8 +301,8 @@ export class ContentManager {
   private getAvailablePlatforms(): PlatformType[] {
     const status = this.publisher.getConfigurationStatus();
     return Object.entries(status)
-      .filter(([_, isConfigured]) => isConfigured)
-      .map(([platform, _]) => platform as PlatformType);
+      .filter(([_platform, isConfigured]) => isConfigured)
+      .map(([platform, _isConfigured]) => platform as PlatformType);
   }
 
   /**

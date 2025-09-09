@@ -3,8 +3,8 @@
  */
 
 import axios, { AxiosInstance } from 'axios';
-import { LinkedInConfig, APIResponse, RequestOptions } from '../types/config';
-import { AIContent, PublishResult, Collection } from '../types/content';
+import { LinkedInConfig, APIResponse } from '../types/config';
+import { AIContent, PublishResult } from '../types/content';
 
 export class LinkedInAdapter {
   private client: AxiosInstance;
@@ -75,17 +75,6 @@ export class LinkedInAdapter {
    */
   private async publishArticle(content: AIContent): Promise<PublishResult> {
     try {
-      const articleData = {
-        author: `urn:li:person:${this.config.userId}`,
-        title: content.title,
-        content: {
-          article: content.content,
-        },
-        visibility: {
-          code: content.status === 'published' ? 'PUBLIC' : 'CONNECTIONS',
-        },
-      };
-
       const response = await this.client.post('/ugcPosts', {
         author: `urn:li:person:${this.config.userId}`,
         lifecycleState: 'PUBLISHED',

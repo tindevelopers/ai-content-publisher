@@ -158,7 +158,7 @@ export class BulkPublisher {
     try {
       const testResults = this.tester.testContentForMultiplePlatforms(
         item.content,
-        item.platforms
+        item.platforms,
       );
 
       const isReady = Array.from(testResults.values()).every(result => result.isCompatible);
@@ -313,7 +313,7 @@ export class BulkPublisher {
     try {
       const publishResults = await this.publisher.publishToMultiple(
         item.content,
-        item.platforms
+        item.platforms,
       );
 
       this.updateItem(item.id, {

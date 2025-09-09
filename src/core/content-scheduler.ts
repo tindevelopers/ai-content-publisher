@@ -61,7 +61,7 @@ export class ContentScheduler {
   private scheduleConfig: ScheduleConfig;
   private contentQueue: Map<string, QueuedContent> = new Map();
   private isRunning: boolean = false;
-  private intervalId?: NodeJS.Timeout;
+  private intervalId?: ReturnType<typeof setInterval>;
 
   constructor(publisher: AIContentPublisher, config: ScheduleConfig) {
     this.publisher = publisher;
@@ -193,7 +193,7 @@ export class ContentScheduler {
     return Array.from(this.contentQueue.values())
       .filter(content => 
         content.status === 'ready' && 
-        content.scheduledFor <= now
+        content.scheduledFor <= now,
       )
       .sort((a, b) => {
         // Sort by priority first, then by scheduled time
@@ -222,7 +222,7 @@ export class ContentScheduler {
         // Publish to all platforms
         const publishResults = await this.publisher.publishToMultiple(
           queuedContent.content,
-          queuedContent.platforms
+          queuedContent.platforms,
         );
 
         // Update with results
@@ -265,7 +265,7 @@ export class ContentScheduler {
     try {
       const testResults = this.tester.testContentForMultiplePlatforms(
         queuedContent.content,
-        queuedContent.platforms
+        queuedContent.platforms,
       );
 
       const isReady = Array.from(testResults.values()).every(result => result.isCompatible);
@@ -326,7 +326,7 @@ export class ContentScheduler {
     const failedContent = Array.from(this.contentQueue.values())
       .filter(content => 
         content.status === 'failed' && 
-        (content.retryCount || 0) < (this.scheduleConfig.maxRetries || 3)
+        (content.retryCount || 0) < (this.scheduleConfig.maxRetries || 3),
       );
 
     for (const content of failedContent) {

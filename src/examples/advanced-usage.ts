@@ -12,7 +12,7 @@ import {
   AIContent,
   PlatformType,
   ScheduleConfig,
-  BulkPublishConfig
+  BulkPublishConfig,
 } from '../index';
 
 // Example 1: Content Testing and Optimization

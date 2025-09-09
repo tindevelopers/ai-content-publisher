@@ -3,7 +3,7 @@
  */
 
 import axios, { AxiosInstance } from 'axios';
-import { TwitterConfig, APIResponse, RequestOptions } from '../types/config';
+import { TwitterConfig, APIResponse } from '../types/config';
 import { AIContent, PublishResult, Collection } from '../types/content';
 
 export class TwitterAdapter {
@@ -40,11 +40,11 @@ export class TwitterAdapter {
         data: response.data,
         statusCode: response.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status,
+        error: (error as any).response?.data?.message || (error as Error).message,
+        statusCode: (error as any).response?.status,
       };
     }
   }
@@ -59,11 +59,11 @@ export class TwitterAdapter {
       } else {
         return await this.publishTweet(content);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
         message: 'Failed to publish to Twitter',
-        errors: [error.response?.data?.message || error.message],
+        errors: [(error as any).response?.data?.message || (error as Error).message],
         platform: 'twitter',
       };
     }
@@ -88,7 +88,7 @@ export class TwitterAdapter {
         platform: 'twitter',
         publishedAt: new Date(),
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw error;
     }
   }
@@ -145,7 +145,7 @@ export class TwitterAdapter {
         platform: 'twitter',
         publishedAt: new Date(),
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw error;
     }
   }
@@ -195,8 +195,8 @@ export class TwitterAdapter {
       // This would require implementing media upload functionality
       // For now, return a placeholder
       return 'media_id_placeholder';
-    } catch (error: any) {
-      throw new Error(`Failed to upload media: ${error.message}`);
+    } catch (error: unknown) {
+      throw new Error(`Failed to upload media: ${(error as Error).message}`);
     }
   }
 
@@ -211,11 +211,11 @@ export class TwitterAdapter {
         data: response.data,
         statusCode: response.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status,
+        error: (error as any).response?.data?.message || (error as Error).message,
+        statusCode: (error as any).response?.status,
       };
     }
   }
@@ -231,11 +231,11 @@ export class TwitterAdapter {
         data: response.data,
         statusCode: response.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status,
+        error: (error as any).response?.data?.message || (error as Error).message,
+        statusCode: (error as any).response?.status,
       };
     }
   }
@@ -251,11 +251,11 @@ export class TwitterAdapter {
         data: response.data,
         statusCode: response.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status,
+        error: (error as any).response?.data?.message || (error as Error).message,
+        statusCode: (error as any).response?.status,
       };
     }
   }
@@ -273,11 +273,11 @@ export class TwitterAdapter {
         
         // Add delay between tweets to avoid rate limiting
         await new Promise(resolve => setTimeout(resolve, 2000));
-      } catch (error: any) {
+      } catch (error: unknown) {
         results.push({
           success: false,
           message: 'Failed to publish content',
-          errors: [error.message],
+          errors: [(error as Error).message],
           platform: 'twitter',
         });
       }

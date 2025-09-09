@@ -2,7 +2,7 @@
  * Content testing system for validating platform compatibility
  */
 
-import { AIContent, PlatformType, ValidationResult, ValidationError } from '../types/content';
+import { AIContent, PlatformType } from '../types/content';
 
 export interface ContentTestResult {
   platform: PlatformType;

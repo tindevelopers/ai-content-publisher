@@ -3,7 +3,7 @@
  */
 
 import axios, { AxiosInstance } from 'axios';
-import { MediumConfig, APIResponse, RequestOptions } from '../types/config';
+import { MediumConfig, APIResponse } from '../types/config';
 import { AIContent, PublishResult, Collection } from '../types/content';
 
 export class MediumAdapter {
@@ -41,11 +41,11 @@ export class MediumAdapter {
         data: response.data,
         statusCode: response.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status,
+        error: (error as any).response?.data?.message || (error as Error).message,
+        statusCode: (error as any).response?.status,
       };
     }
   }
@@ -68,11 +68,11 @@ export class MediumAdapter {
         platform: 'medium',
         publishedAt: new Date(response.data.data.publishedAt),
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
         message: 'Failed to publish to Medium',
-        errors: [error.response?.data?.message || error.message],
+        errors: [(error as any).response?.data?.message || (error as Error).message],
         platform: 'medium',
       };
     }
@@ -127,8 +127,8 @@ export class MediumAdapter {
         description: pub.description,
         url: pub.url,
       }));
-    } catch (error: any) {
-      throw new Error(`Failed to fetch Medium publications: ${error.message}`);
+    } catch (error: unknown) {
+      throw new Error(`Failed to fetch Medium publications: ${(error as Error).message}`);
     }
   }
 
@@ -149,11 +149,11 @@ export class MediumAdapter {
         platform: 'medium',
         publishedAt: new Date(response.data.data.publishedAt),
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
         message: 'Failed to publish to Medium publication',
-        errors: [error.response?.data?.message || error.message],
+        errors: [(error as any).response?.data?.message || (error as Error).message],
         platform: 'medium',
       };
     }
@@ -170,11 +170,11 @@ export class MediumAdapter {
         data: response.data.data,
         statusCode: response.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status,
+        error: (error as any).response?.data?.message || (error as Error).message,
+        statusCode: (error as any).response?.status,
       };
     }
   }
@@ -196,11 +196,11 @@ export class MediumAdapter {
         platform: 'medium',
         publishedAt: new Date(response.data.data.updatedAt),
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
         message: 'Failed to update Medium post',
-        errors: [error.response?.data?.message || error.message],
+        errors: [(error as any).response?.data?.message || (error as Error).message],
         platform: 'medium',
       };
     }
@@ -216,11 +216,11 @@ export class MediumAdapter {
       try {
         const result = await this.publishContent(content);
         results.push(result);
-      } catch (error: any) {
+      } catch (error: unknown) {
         results.push({
           success: false,
           message: 'Failed to publish content',
-          errors: [error.message],
+          errors: [(error as Error).message],
           platform: 'medium',
         });
       }
@@ -240,11 +240,11 @@ export class MediumAdapter {
         data: response.data.data,
         statusCode: response.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status,
+        error: (error as any).response?.data?.message || (error as Error).message,
+        statusCode: (error as any).response?.status,
       };
     }
   }

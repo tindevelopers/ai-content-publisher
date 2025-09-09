@@ -3,7 +3,7 @@
  */
 
 import axios, { AxiosInstance } from 'axios';
-import { GhostConfig, APIResponse, RequestOptions } from '../types/config';
+import { GhostConfig, APIResponse } from '../types/config';
 import { AIContent, PublishResult, Collection } from '../types/content';
 
 export class GhostAdapter {
@@ -40,11 +40,11 @@ export class GhostAdapter {
         data: response.data,
         statusCode: response.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status,
+        error: (error as any).response?.data?.message || (error as Error).message,
+        statusCode: (error as any).response?.status,
       };
     }
   }
@@ -58,7 +58,7 @@ export class GhostAdapter {
       const ghostPost = this.transformToGhostPost(content);
 
       const response = await this.client.post('/posts', {
-        posts: [ghostPost]
+        posts: [ghostPost],
       });
 
       const post = response.data.posts[0];
@@ -71,11 +71,11 @@ export class GhostAdapter {
         platform: 'ghost',
         publishedAt: new Date(post.published_at),
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
         message: 'Failed to publish to Ghost',
-        errors: [error.response?.data?.message || error.message],
+        errors: [(error as any).response?.data?.message || (error as Error).message],
         platform: 'ghost',
       };
     }
@@ -138,8 +138,8 @@ export class GhostAdapter {
         description: tag.description,
         count: tag.count?.posts || 0,
       }));
-    } catch (error: any) {
-      throw new Error(`Failed to fetch Ghost tags: ${error.message}`);
+    } catch (error: unknown) {
+      throw new Error(`Failed to fetch Ghost tags: ${(error as Error).message}`);
     }
   }
 
@@ -154,11 +154,11 @@ export class GhostAdapter {
         data: response.data.posts[0],
         statusCode: response.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status,
+        error: (error as any).response?.data?.message || (error as Error).message,
+        statusCode: (error as any).response?.status,
       };
     }
   }
@@ -171,7 +171,7 @@ export class GhostAdapter {
       const ghostPost = this.transformToGhostPost(content);
       
       const response = await this.client.put(`/posts/${postId}`, {
-        posts: [ghostPost]
+        posts: [ghostPost],
       });
 
       const post = response.data.posts[0];
@@ -184,11 +184,11 @@ export class GhostAdapter {
         platform: 'ghost',
         publishedAt: new Date(post.updated_at),
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
         message: 'Failed to update Ghost post',
-        errors: [error.response?.data?.message || error.message],
+        errors: [(error as any).response?.data?.message || (error as Error).message],
         platform: 'ghost',
       };
     }
@@ -205,11 +205,11 @@ export class GhostAdapter {
         data: response.data,
         statusCode: response.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error: error.response?.data?.message || error.message,
-        statusCode: error.response?.status,
+        error: (error as any).response?.data?.message || (error as Error).message,
+        statusCode: (error as any).response?.status,
       };
     }
   }
@@ -224,11 +224,11 @@ export class GhostAdapter {
       try {
         const result = await this.publishContent(content);
         results.push(result);
-      } catch (error: any) {
+      } catch (error: unknown) {
         results.push({
           success: false,
           message: 'Failed to publish content',
-          errors: [error.message],
+          errors: [(error as Error).message],
           platform: 'ghost',
         });
       }
