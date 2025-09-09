@@ -1,17 +1,21 @@
 # AI Content Publisher SDK
 
-A powerful TypeScript SDK for publishing AI-generated content to Webflow and WordPress. Streamline your content publishing workflow with a unified interface that handles validation, formatting, and publishing across multiple CMS platforms.
+A powerful TypeScript SDK for publishing AI-generated content across multiple platforms including CMS systems (Webflow, WordPress, Ghost, Medium, Reddit, Blogger), social media platforms (Instagram, LinkedIn, Facebook, X/Twitter, Tumblr), and newsletter platforms (Substack). Streamline your content publishing workflow with advanced features like content testing, automated scheduling, and bulk publishing.
 
 ## Features
 
-- 🚀 **Unified Interface** - Single API for multiple CMS platforms
-- 🔐 **Secure Authentication** - API key management for Webflow and WordPress
+- 🚀 **Unified Interface** - Single API for multiple platforms
+- 🔐 **Secure Authentication** - API key management for all platforms
 - ✅ **Content Validation** - Built-in validation with helpful error messages
 - 🎯 **Type Safety** - Full TypeScript support with comprehensive types
 - 📦 **Batch Publishing** - Publish multiple content items efficiently
-- 🔄 **Multi-Platform** - Publish to Webflow and WordPress simultaneously
+- 🔄 **Multi-Platform** - Publish to multiple platforms simultaneously
 - 🎨 **Content Mapping** - Automatic field mapping between platforms
 - 📊 **SEO Optimization** - Built-in SEO metadata handling
+- 🧪 **Content Testing** - Test content compatibility across platforms
+- ⏰ **Automated Scheduling** - Schedule content with optimal timing
+- 📈 **Bulk Operations** - Handle large-scale content publishing
+- 🎛️ **Content Management** - Unified content management system
 
 ## Installation
 
@@ -52,13 +56,52 @@ const results = await publisher.publishToMultiple(content, ['webflow', 'wordpres
 console.log(results);
 ```
 
+## Supported Platforms
+
+### CMS Platforms
+- **Webflow** - Modern website builder with CMS
+- **WordPress** - Popular content management system
+- **Ghost** - Professional publishing platform
+- **Medium** - Publishing platform for writers
+- **Reddit** - Community discussion platform
+- **Blogger** - Google's blogging platform
+
+### Social Media Platforms
+- **Instagram** - Visual content and stories
+- **LinkedIn** - Professional networking and articles
+- **Facebook** - Social media posts and pages
+- **X/Twitter** - Microblogging and threads
+- **Tumblr** - Microblogging and multimedia
+
+### Newsletter Platforms
+- **Substack** - Newsletter and subscription platform
+
 ## Supported Content Types
 
+### CMS Content Types
 - **Blog Posts** - Standard blog articles with SEO optimization
 - **FAQ Items** - Question and answer content with structured data
 - **Articles** - Long-form content with rich formatting
 - **Product Descriptions** - E-commerce content with specifications
 - **Landing Pages** - Marketing pages with CTAs and conversion tracking
+
+### Social Media Content Types
+- **Social Posts** - Standard social media posts
+- **Social Stories** - Temporary visual content
+- **Social Reels** - Short-form video content
+- **Social Carousels** - Multi-image posts
+
+### Newsletter Content Types
+- **Newsletters** - Email newsletter content
+- **Newsletter Issues** - Individual newsletter editions
+- **Newsletter Series** - Multi-part newsletter content
+
+### Platform-Specific Content Types
+- **Medium Stories** - Medium-specific article format
+- **LinkedIn Articles** - Professional long-form content
+- **Twitter Threads** - Multi-tweet content series
+- **Reddit Posts** - Community discussion posts
+- **Tumblr Posts** - Microblogging content
 
 ## Configuration
 
@@ -294,6 +337,124 @@ The SDK automatically handles SEO optimization:
 - Media library integration
 - Plugin compatibility (Yoast SEO, etc.)
 
+## Advanced Features
+
+### Content Testing System
+
+Test content compatibility across platforms before publishing:
+
+```typescript
+import { ContentTester } from 'ai-content-publisher';
+
+const tester = new ContentTester();
+
+// Test content for a single platform
+const result = tester.testContentForPlatform(content, 'webflow');
+console.log(`Compatibility: ${result.isCompatible}`);
+console.log(`Score: ${result.score}/100`);
+
+// Test content for multiple platforms
+const platforms = ['webflow', 'linkedin', 'twitter'];
+const results = tester.testContentForMultiplePlatforms(content, platforms);
+
+// Get best platforms for content
+const bestPlatforms = tester.getBestPlatformsForContent(content, platforms);
+```
+
+### Content Scheduling System
+
+Automate content publishing with optimal timing:
+
+```typescript
+import { ContentScheduler, ScheduleConfig } from 'ai-content-publisher';
+
+const scheduleConfig: ScheduleConfig = {
+  platforms: ['webflow', 'linkedin', 'twitter'],
+  frequency: {
+    type: 'daily',
+    time: '09:00',
+    timezone: 'America/New_York',
+  },
+  autoTest: true,
+  retryFailed: true,
+};
+
+const scheduler = new ContentScheduler(publisher, scheduleConfig);
+
+// Add content to schedule
+const queuedContent = scheduler.addToQueue(content, ['webflow'], {
+  priority: 'high',
+  autoSchedule: true,
+});
+
+// Start scheduler
+scheduler.start();
+```
+
+### Bulk Publishing System
+
+Handle large-scale content publishing efficiently:
+
+```typescript
+import { BulkPublisher, BulkPublishConfig } from 'ai-content-publisher';
+
+const bulkConfig: BulkPublishConfig = {
+  platforms: ['webflow', 'linkedin', 'twitter'],
+  concurrency: 3,
+  autoTest: true,
+  retryFailed: true,
+};
+
+const bulkPublisher = new BulkPublisher(publisher, bulkConfig);
+
+// Add items to bulk publisher
+const items = bulkPublisher.addItems([
+  {
+    content: articleContent,
+    platforms: ['webflow', 'linkedin'],
+    priority: 'high',
+  },
+]);
+
+// Publish all items
+const result = await bulkPublisher.publishAll();
+```
+
+### Content Manager
+
+Unified interface for all content operations:
+
+```typescript
+import { ContentManager } from 'ai-content-publisher';
+
+const contentManager = new ContentManager({
+  publisher,
+  scheduleConfig: {
+    platforms: ['webflow', 'linkedin', 'twitter'],
+    frequency: { type: 'daily', time: '10:00' },
+    autoTest: true,
+  },
+  autoTest: true,
+  autoOptimize: true,
+});
+
+// Test content for all platforms
+const testResults = await contentManager.testContentForAllPlatforms(content);
+
+// Publish immediately
+const results = await contentManager.publishNow(content, ['webflow', 'linkedin']);
+
+// Schedule content
+const scheduled = await contentManager.scheduleContent(content, ['twitter'], {
+  priority: 'high',
+});
+
+// Publish all ready content
+const publishAllResult = await contentManager.publishAllNow();
+```
+
+For detailed information about advanced features, see the [Advanced Features Guide](ADVANCED_FEATURES.md).
+
 ## Advanced Usage
 
 ### Custom Configuration
@@ -310,6 +471,16 @@ const publisher = new AIContentPublisher({
     username: 'admin',
     password: 'app-password',
     defaultCategory: 'AI Content'
+  },
+  linkedin: {
+    accessToken: 'your-linkedin-token',
+    userId: 'your-user-id'
+  },
+  twitter: {
+    apiKey: 'your-api-key',
+    apiSecret: 'your-api-secret',
+    accessToken: 'your-access-token',
+    accessTokenSecret: 'your-access-token-secret'
   },
   retryConfig: {
     maxRetries: 3,
@@ -359,5 +530,6 @@ Built with ❤️ for the AI content creation community.
 
 ## Latest Updates
 
+- **v1.1.0** - Added advanced features: content testing, scheduling, bulk publishing, and content management
 - **v1.0.1** - Enhanced error handling and improved TypeScript definitions
 - **v1.0.0** - Initial release with Webflow and WordPress support

@@ -2,7 +2,17 @@
  * Configuration manager for handling API keys and platform configurations
  */
 
-import { PublisherConfig, WebflowConfig, WordPressConfig, PlatformConfig } from '../types/config';
+import { 
+  PublisherConfig, 
+  WebflowConfig, 
+  WordPressConfig, 
+  GhostConfig,
+  MediumConfig,
+  LinkedInConfig,
+  TwitterConfig,
+  SubstackConfig,
+  PlatformConfig 
+} from '../types/config';
 
 export class ConfigManager {
   private configs: Map<string, PlatformConfig> = new Map();
@@ -62,9 +72,64 @@ export class ConfigManager {
   }
 
   /**
+   * Configure Ghost integration
+   */
+  setGhostConfig(config: GhostConfig): void {
+    this.configs.set('ghost', {
+      type: 'ghost',
+      config,
+      isConfigured: true,
+    });
+  }
+
+  /**
+   * Configure Medium integration
+   */
+  setMediumConfig(config: MediumConfig): void {
+    this.configs.set('medium', {
+      type: 'medium',
+      config,
+      isConfigured: true,
+    });
+  }
+
+  /**
+   * Configure LinkedIn integration
+   */
+  setLinkedInConfig(config: LinkedInConfig): void {
+    this.configs.set('linkedin', {
+      type: 'linkedin',
+      config,
+      isConfigured: true,
+    });
+  }
+
+  /**
+   * Configure Twitter integration
+   */
+  setTwitterConfig(config: TwitterConfig): void {
+    this.configs.set('twitter', {
+      type: 'twitter',
+      config,
+      isConfigured: true,
+    });
+  }
+
+  /**
+   * Configure Substack integration
+   */
+  setSubstackConfig(config: SubstackConfig): void {
+    this.configs.set('substack', {
+      type: 'substack',
+      config,
+      isConfigured: true,
+    });
+  }
+
+  /**
    * Get configuration for a specific platform
    */
-  getConfig(platform: 'webflow' | 'wordpress'): PlatformConfig | undefined {
+  getConfig(platform: string): PlatformConfig | undefined {
     return this.configs.get(platform);
   }
 
@@ -85,6 +150,46 @@ export class ConfigManager {
   }
 
   /**
+   * Get Ghost configuration
+   */
+  getGhostConfig(): GhostConfig | undefined {
+    const config = this.configs.get('ghost');
+    return config?.config as GhostConfig;
+  }
+
+  /**
+   * Get Medium configuration
+   */
+  getMediumConfig(): MediumConfig | undefined {
+    const config = this.configs.get('medium');
+    return config?.config as MediumConfig;
+  }
+
+  /**
+   * Get LinkedIn configuration
+   */
+  getLinkedInConfig(): LinkedInConfig | undefined {
+    const config = this.configs.get('linkedin');
+    return config?.config as LinkedInConfig;
+  }
+
+  /**
+   * Get Twitter configuration
+   */
+  getTwitterConfig(): TwitterConfig | undefined {
+    const config = this.configs.get('twitter');
+    return config?.config as TwitterConfig;
+  }
+
+  /**
+   * Get Substack configuration
+   */
+  getSubstackConfig(): SubstackConfig | undefined {
+    const config = this.configs.get('substack');
+    return config?.config as SubstackConfig;
+  }
+
+  /**
    * Get global configuration
    */
   getGlobalConfig(): Partial<PublisherConfig> {
@@ -94,7 +199,7 @@ export class ConfigManager {
   /**
    * Check if a platform is configured
    */
-  isConfigured(platform: 'webflow' | 'wordpress'): boolean {
+  isConfigured(platform: string): boolean {
     const config = this.configs.get(platform);
     return config?.isConfigured || false;
   }

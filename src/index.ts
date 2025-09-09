@@ -8,6 +8,10 @@
 export { AIContentPublisher } from './core/ai-content-publisher';
 export { ConfigManager } from './core/config-manager';
 export { ContentValidator } from './core/content-validator';
+export { ContentTester } from './core/content-tester';
+export { ContentScheduler } from './core/content-scheduler';
+export { BulkPublisher } from './core/bulk-publisher';
+export { ContentManager } from './core/content-manager';
 
 // Import for utility functions
 import { AIContentPublisher } from './core/ai-content-publisher';
@@ -18,6 +22,11 @@ import type { AIContent } from './types/content';
 // Adapters
 export { WebflowAdapter } from './adapters/webflow-adapter';
 export { WordPressAdapter } from './adapters/wordpress-adapter';
+export { GhostAdapter } from './adapters/ghost-adapter';
+export { MediumAdapter } from './adapters/medium-adapter';
+export { LinkedInAdapter } from './adapters/linkedin-adapter';
+export { TwitterAdapter } from './adapters/twitter-adapter';
+export { SubstackAdapter } from './adapters/substack-adapter';
 
 // Type exports
 export type {
@@ -25,10 +34,20 @@ export type {
   AIContent,
   ContentType,
   ContentStatus,
+  PlatformType,
   ContentImage,
   SEOData,
   FAQItem,
   ProductSpecification,
+  SocialMediaPost,
+  SocialMediaStory,
+  SocialMediaReel,
+  SocialMediaCarousel,
+  NewsletterContent,
+  NewsletterSection,
+  TwitterThread,
+  RedditPost,
+  TumblrPost,
   ValidationResult,
   ValidationError,
   PublishResult,
@@ -41,11 +60,26 @@ export type {
   PublisherConfig,
   WebflowConfig,
   WordPressConfig,
+  GhostConfig,
+  MediumConfig,
+  RedditConfig,
+  BloggerConfig,
+  InstagramConfig,
+  LinkedInConfig,
+  FacebookConfig,
+  TwitterConfig,
+  TumblrConfig,
+  SubstackConfig,
   RetryConfig,
   PlatformConfig,
   APIResponse,
   RequestOptions
 } from './types/config';
+
+// Advanced feature types
+export type { ScheduleConfig } from './core/content-scheduler';
+export type { BulkPublishConfig } from './core/bulk-publisher';
+export type { ContentManagerConfig } from './core/content-manager';
 
 // Utility functions
 export const createContentPublisher = (config?: PublisherConfig) => {
