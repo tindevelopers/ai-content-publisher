@@ -100,8 +100,13 @@ export interface SubstackConfig {
 
 export interface RetryConfig {
   maxRetries: number;
-  backoffMs: number;
-  exponentialBackoff?: boolean;
+  baseDelayMs: number;
+  maxDelayMs: number;
+  exponentialBackoff: boolean;
+  jitterMs?: number;
+  retryableErrors?: string[];
+  circuitBreakerThreshold?: number;
+  circuitBreakerResetTimeMs?: number;
 }
 
 export interface PublisherConfig {

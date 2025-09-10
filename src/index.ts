@@ -13,6 +13,22 @@ export { ContentScheduler } from './core/content-scheduler';
 export { BulkPublisher } from './core/bulk-publisher';
 export { ContentManager } from './core/content-manager';
 
+// Error handling and logging
+export { 
+  RetryHandler, 
+  CircuitBreaker, 
+  RetryableError, 
+  ErrorType, 
+  CircuitState,
+  DEFAULT_RETRY_CONFIGS 
+} from './core/retry-handler';
+export { 
+  SDKLogger, 
+  LogLevel, 
+  createLogger, 
+  logger 
+} from './core/logger';
+
 // Import for utility functions
 import { AIContentPublisher } from './core/ai-content-publisher';
 import { ContentValidator } from './core/content-validator';
@@ -96,3 +112,4 @@ export const VERSION = '1.0.0';
 
 // Default export
 export default AIContentPublisher;
+// Tools and utilities

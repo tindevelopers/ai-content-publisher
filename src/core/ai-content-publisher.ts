@@ -4,6 +4,8 @@
 
 import { ConfigManager } from './config-manager';
 import { ContentValidator } from './content-validator';
+import { RetryHandler, DEFAULT_RETRY_CONFIGS, RetryableError, ErrorType } from './retry-handler';
+import { logger, LogContext } from './logger';
 import { WebflowAdapter } from '../adapters/webflow-adapter';
 import { WordPressAdapter } from '../adapters/wordpress-adapter';
 import { GhostAdapter } from '../adapters/ghost-adapter';
@@ -33,6 +35,7 @@ import {
 export class AIContentPublisher {
   private configManager: ConfigManager;
   private validator: ContentValidator;
+  private retryHandler: RetryHandler;
   
   // CMS Adapters
   private webflowAdapter?: WebflowAdapter;
@@ -50,6 +53,12 @@ export class AIContentPublisher {
   constructor(config?: PublisherConfig) {
     this.configManager = new ConfigManager(config);
     this.validator = new ContentValidator();
+    this.retryHandler = new RetryHandler(DEFAULT_RETRY_CONFIGS.api);
+    
+    logger.info('AIContentPublisher initialized', {
+      operation: 'initialization',
+      metadata: { hasConfig: !!config }
+    });
     
     // Initialize adapters if configurations are provided
     this.initializeAdapters();
@@ -102,19 +111,58 @@ export class AIContentPublisher {
    * Configure Webflow integration
    */
   async configureWebflow(apiKey: string, siteId: string, defaultCollectionId?: string): Promise<void> {
-    const config: WebflowConfig = {
-      apiKey,
-      siteId,
-      defaultCollectionId,
+    const logContext: LogContext = {
+      platform: 'webflow',
+      operation: 'configure_platform'
     };
 
-    this.configManager.setWebflowConfig(config);
-    this.webflowAdapter = new WebflowAdapter(config);
+    logger.info('Configuring Webflow integration', logContext);
 
-    // Test the connection
-    const testResult = await this.webflowAdapter.testConnection();
-    if (!testResult.success) {
-      throw new Error(`Webflow configuration failed: ${testResult.error}`);
+    try {
+      const config: WebflowConfig = {
+        apiKey,
+        siteId,
+        defaultCollectionId,
+      };
+
+      this.configManager.setWebflowConfig(config);
+      this.webflowAdapter = new WebflowAdapter(config);
+
+      // Test the connection with retry logic
+      const testResult = await this.retryHandler.executeWithRetry(
+        () => this.webflowAdapter!.testConnection(),
+        DEFAULT_RETRY_CONFIGS.network,
+        'webflow_connection_test'
+      );
+
+      if (!testResult.success || !testResult.data?.success) {
+        const error = new RetryableError(
+          `Webflow configuration failed: ${testResult.error?.message || testResult.data?.error}`,
+          ErrorType.AUTHENTICATION,
+          false
+        );
+        
+        logger.error('Webflow configuration failed', {
+          ...logContext,
+          error,
+          metadata: { siteId, hasDefaultCollection: !!defaultCollectionId }
+        });
+
+        throw error;
+      }
+
+      logger.info('Webflow integration configured successfully', {
+        ...logContext,
+        metadata: { siteId, hasDefaultCollection: !!defaultCollectionId }
+      });
+
+    } catch (error: any) {
+      logger.error('Failed to configure Webflow', {
+        ...logContext,
+        error,
+        metadata: { siteId }
+      });
+      throw error;
     }
   }
 
@@ -269,46 +317,114 @@ export class AIContentPublisher {
    * Main method to publish content to specified platform
    */
   async publish(content: AIContent, platform: PlatformType): Promise<PublishResult> {
-    // Validate content first
-    const validation = this.validateContent(content);
-    if (!validation.isValid) {
+    const startTime = Date.now();
+    const logContext: LogContext = {
+      platform,
+      contentId: content.slug || content.title,
+      operation: 'publish_content'
+    };
+
+    logger.info(`Starting content publish to ${platform}`, logContext);
+
+    try {
+      // Validate content first
+      const validation = this.validateContent(content);
+      if (!validation.isValid) {
+        const errorResult = {
+          success: false,
+          platform,
+          message: 'Content validation failed',
+          errors: validation.errors.map(e => `${e.field}: ${e.message}`),
+        };
+
+        logger.warn('Content validation failed', {
+          ...logContext,
+          metadata: { 
+            validationErrors: validation.errors,
+            duration: Date.now() - startTime
+          }
+        });
+
+        return errorResult;
+      }
+
+      // Route to appropriate adapter with retry logic
+      const result = await this.retryHandler.executeWithRetry(
+        async () => {
+          switch (platform) {
+            // CMS Platforms
+            case 'webflow':
+              return this.publishToWebflow(content);
+            case 'wordpress':
+              return this.publishToWordPress(content);
+            case 'ghost':
+              return this.publishToGhost(content);
+            case 'medium':
+              return this.publishToMedium(content);
+            
+            // Social Media Platforms
+            case 'linkedin':
+              return this.publishToLinkedIn(content);
+            case 'twitter':
+              return this.publishToTwitter(content);
+            
+            // Newsletter Platforms
+            case 'substack':
+              return this.publishToSubstack(content);
+            
+            default:
+              throw new RetryableError(
+                'Unsupported platform',
+                ErrorType.VALIDATION,
+                false // Not retryable
+              );
+          }
+        },
+        DEFAULT_RETRY_CONFIGS.api,
+        `publish_${platform}`
+      );
+
+      const duration = Date.now() - startTime;
+
+      if (result.success && result.data) {
+        logger.logPublishAttempt(platform, logContext.contentId!, true, duration);
+        return result.data;
+      } else {
+        const errorResult: PublishResult = {
+          success: false,
+          platform,
+          message: result.error?.message || 'Publish operation failed',
+          errors: [result.error?.message || 'Unknown error'],
+        };
+
+        logger.logPublishAttempt(
+          platform, 
+          logContext.contentId!, 
+          false, 
+          duration, 
+          result.error
+        );
+
+        return errorResult;
+      }
+
+    } catch (error: any) {
+      const duration = Date.now() - startTime;
+      const errorType = RetryHandler.categorizeError(error);
+      
+      logger.error('Unexpected error during publish', {
+        ...logContext,
+        error,
+        duration,
+        metadata: { errorType }
+      });
+
       return {
         success: false,
         platform,
-        message: 'Content validation failed',
-        errors: validation.errors.map(e => `${e.field}: ${e.message}`),
+        message: 'Unexpected error during publish',
+        errors: [error.message || 'Unknown error'],
       };
-    }
-
-    // Route to appropriate adapter
-    switch (platform) {
-      // CMS Platforms
-      case 'webflow':
-        return this.publishToWebflow(content);
-      case 'wordpress':
-        return this.publishToWordPress(content);
-      case 'ghost':
-        return this.publishToGhost(content);
-      case 'medium':
-        return this.publishToMedium(content);
-      
-      // Social Media Platforms
-      case 'linkedin':
-        return this.publishToLinkedIn(content);
-      case 'twitter':
-        return this.publishToTwitter(content);
-      
-      // Newsletter Platforms
-      case 'substack':
-        return this.publishToSubstack(content);
-      
-      default:
-        return {
-          success: false,
-          platform,
-          message: 'Unsupported platform',
-          errors: ['UNSUPPORTED_PLATFORM'],
-        };
     }
   }
 

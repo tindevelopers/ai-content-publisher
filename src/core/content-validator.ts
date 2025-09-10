@@ -99,7 +99,16 @@ export class ContentValidator {
    * Validate content type
    */
   private validateType(type: ContentType, errors: ValidationError[]): void {
-    const validTypes: ContentType[] = ['blog', 'faq', 'article', 'product-description', 'landing-page'];
+    const validTypes: ContentType[] = [
+      // CMS Content Types
+      'blog', 'faq', 'article', 'product-description', 'landing-page',
+      // Social Media Content Types
+      'social-post', 'social-story', 'social-reel', 'social-carousel',
+      // Newsletter Content Types
+      'newsletter', 'newsletter-issue', 'newsletter-series',
+      // Platform-specific Content Types
+      'medium-story', 'linkedin-article', 'twitter-thread', 'reddit-post', 'tumblr-post'
+    ];
     
     if (!validTypes.includes(type)) {
       errors.push({

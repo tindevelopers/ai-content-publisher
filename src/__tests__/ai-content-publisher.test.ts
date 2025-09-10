@@ -9,6 +9,21 @@ import { AIContent } from '../types/content';
 jest.mock('../adapters/webflow-adapter');
 jest.mock('../adapters/wordpress-adapter');
 
+// Mock the logger to avoid console output during tests
+jest.mock('../core/logger', () => ({
+  logger: {
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+    debug: jest.fn(),
+    logPublishAttempt: jest.fn(),
+    logApiCall: jest.fn(),
+    logRetryAttempt: jest.fn(),
+    logCircuitBreakerStateChange: jest.fn(),
+    startTimer: jest.fn(() => jest.fn())
+  }
+}));
+
 describe('AIContentPublisher', () => {
   let publisher: AIContentPublisher;
 

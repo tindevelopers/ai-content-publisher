@@ -87,11 +87,12 @@ describe('ContentValidator', () => {
 
       const result = validator.validate(content);
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContainEqual({
-        field: 'type',
-        message: 'Invalid content type. Must be one of: blog, faq, article, product-description, landing-page',
-        code: 'INVALID_CONTENT_TYPE',
-      });
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          field: 'type',
+          code: 'INVALID_CONTENT_TYPE',
+        })
+      );
     });
   });
 
